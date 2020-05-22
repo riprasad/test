@@ -1,7 +1,7 @@
 product:
   name: Red Hat Integration
   abbreviation: RHI
-  stage: DR2
+  stage: ${WORKSPACE}
   issueTrackerUrl: http://issues.jboss.org/browse/ENTESB
 version: 1.0.0
 milestone: DR1
