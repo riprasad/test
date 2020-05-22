@@ -4,6 +4,6 @@ node() {
     ls -al
     echo ${WORKSPACE}
     pwd
-    cat ${WORKSPACE}/service-registry/1.0.0/build-config.yaml
+    cat ${WORKSPACE}/service-registry/1.0.0/config.yaml
     '''
 }
