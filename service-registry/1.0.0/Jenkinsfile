@@ -3,5 +3,6 @@ node() {
     sh '''
     ls -al
     echo ${WORKSPACE}
+    pwd
     '''
 }
