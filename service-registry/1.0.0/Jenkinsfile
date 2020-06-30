@@ -1,9 +1,0 @@
-node() {
-    checkout scm
-    sh '''
-    ls -al
-    echo ${WORKSPACE}
-    pwd
-    cat ${WORKSPACE}/service-registry/1.0.0/config.yaml
-    '''
-}
