@@ -38,9 +38,9 @@ jobs:
             architecture: x64
       - name: Checkout Code
         uses: actions/checkout@v2
+      - name: Verify Docker Release
+        run: ./.github/scripts/verify-docker-release.sh
       - name: Verify Maven Release
         run: |
           cd .github/test-mvn-deploy
           mvn clean install "-Dversion.apicurio=${{steps.metadata.outputs.release-version}}"
-      - name: Verify Docker Release
-        run: ./.github/scripts/verify-docker-release.sh
