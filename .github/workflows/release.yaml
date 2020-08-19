@@ -38,8 +38,18 @@ jobs:
             architecture: x64
       - name: Checkout Code
         uses: actions/checkout@v2
-      - name: Verify Docker Release
-        run: ./.github/scripts/verify-docker-release.sh
+      - name: Verify Docker Release For mem
+        run: ./.github/scripts/verify-docker-release.sh apicurio/apicurio-registry-mem:${{steps.metadata.outputs.release-version}} apicurio/apicurio-registry-mem:latest apicurio/apicurio-registry-mem:latest-release 
+      - name: Verify Docker Release For asyncmem
+        run: ./.github/scripts/verify-docker-release.sh apicurio/apicurio-registry-asyncmem:${{steps.metadata.outputs.release-version}} apicurio/apicurio-registry-asyncmem:latest apicurio/apicurio-registry-asyncmem:latest-release 
+      - name: Verify Docker Release For kafka
+        run: ./.github/scripts/verify-docker-release.sh apicurio/apicurio-registry-kafka:${{steps.metadata.outputs.release-version}} apicurio/apicurio-registry-kafka:latest apicurio/apicurio-registry-kafka:latest-release 
+      - name: Verify Docker Release For streams
+        run: ./.github/scripts/verify-docker-release.sh apicurio/apicurio-registry-streams:${{steps.metadata.outputs.release-version}} apicurio/apicurio-registry-streams:latest apicurio/apicurio-registry-streams:latest-release 
+      - name: Verify Docker Release For jpa
+        run: ./.github/scripts/verify-docker-release.sh apicurio/apicurio-registry-jpa:${{steps.metadata.outputs.release-version}} apicurio/apicurio-registry-jpa:latest apicurio/apicurio-registry-jpa:latest-release 
+      - name: Verify Docker Release For mem
+        run: ./.github/scripts/verify-docker-release.sh apicurio/apicurio-registry-infinispan:${{steps.metadata.outputs.release-version}} apicurio/apicurio-registry-infinispan:latest apicurio/apicurio-registry-infinispan:latest-release 
       - name: Verify Maven Release
         run: |
           cd .github/test-mvn-deploy
