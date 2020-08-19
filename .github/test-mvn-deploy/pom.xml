@@ -12,19 +12,19 @@
  
 
     <properties>
-        <version.apicurio.latest.release>NA</version.apicurio.latest.release>
+        <version.apicurio.latest.release>To Be Filled at Runtime</version.apicurio.latest.release>
     </properties>
 
     <dependencies>
         <dependency>
           <groupId>io.apicurio</groupId>
           <artifactId>apicurio-registry-rest-client</artifactId>
-          <version>${version.apicurio.latest.release}</version>
+          <version>${version.apicurio}</version>
         </dependency>
         <dependency>
           <groupId>io.apicurio</groupId>
           <artifactId>apicurio-registry-utils-serde</artifactId>
-          <version>${version.apicurio.latest.release}</version>
+          <version>${version.apicurio}</version>
         </dependency>
     </dependencies>
 </project>
