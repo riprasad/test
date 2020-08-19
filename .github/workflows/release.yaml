@@ -23,7 +23,7 @@ jobs:
   verify-release:
     runs-on: ubuntu-18.04
     needs: ["release"]   # The Job gets triggered only after the "release" job has successfully completed. The job doesn't run in case the "release" job fails
-    if: github.event.pull_request.merged == true && github.repository_owner == 'Apicurio'
+    if: github.event.pull_request.merged == true
     steps:
       - name: Retrieve Project Metadata
         uses: radcortez/project-metadata-action@master
