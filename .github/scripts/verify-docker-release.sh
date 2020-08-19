@@ -1,5 +1,21 @@
 #!/bin/bash
 
+#############################################################################################################################################################################################
+## Description: The script helps in verifying two things:-                                                                                                                                 ##
+##                (1) All the images that are passed as parameters are pushed successfully to dockerhub. This is done by fetching the SHA Digests                                          ## 
+##                    for all the images. If we are able to fetch the SHA Digest for the images, that means the images are available at Dockerhub                                          ## 
+##                                                                                                                                                                                         ##
+##                (2) All the images that are passed as parameters are same or not. This is done by matching the SHA Digests for all the images.                                           ## 
+##                    If the SHA Digest for all the images are same, that means the images are same.                                                                                       ## 
+##                                                                                                                                                                                         ##
+##                    NOTE: I have used "Skopeo" to inspect the images. Skopeo tool can helps us in inspecting the docker images without pulling them                                      ##
+##                                                                                                                                                                                         ##
+## USAGE: The script accepts image names as paramaters. We can pass as many image names as we want.                                                                                        ##
+##                                                                                                                                                                                         ##
+## EXAMPLE: ./verify-docker-release.sh apicurio/apicurio-registry-infinispan:1.2.3.Final apicurio/apicurio-registry-infinispan:latest apicurio/apicurio-registry-infinispan:latest-release ## 
+##                                                                                                                                                                                         ##
+############################################################################################################################################################################################# 
+
 set -euo pipefail
 
 IMAGES=("$@")

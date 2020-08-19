@@ -18,12 +18,12 @@ jobs:
           github-token: ${{secrets.GITHUB_TOKEN}}
           metadata-file-path: '.github/project.yaml'
       - name: Echo
-        run: exit 1
+        run: echo "TESTING"
 
   verify-release:
     runs-on: ubuntu-18.04
-    needs: ["release"]
-    if: github.event.pull_request.merged == true
+    needs: ["release"]   # The Job gets triggered only after the "release" job has successfully completed. The job doesn't run in case the "release" job fails
+    if: github.event.pull_request.merged == true && github.repository_owner == 'Apicurio'
     steps:
       - name: Retrieve Project Metadata
         uses: radcortez/project-metadata-action@master
@@ -53,4 +53,4 @@ jobs:
       - name: Verify Maven Release
         run: |
           cd .github/test-mvn-deploy
-          mvn clean install "-Dversion.apicurio=${{steps.metadata.outputs.release-version}}"
+          mvn clean install "-Dversion.apicurio=${{steps.metadata.outputs.release-version}}" # Passing the latest version at run-time
