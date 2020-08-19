@@ -9,7 +9,7 @@ on:
 jobs:
   release:
     runs-on: ubuntu-18.04
-    if: github.event.pull_request.merged == true && github.repository_owner == 'Apicurio'
+    if: github.event.pull_request.merged == true
     steps:
       - name: Retrieve Project Metadata
         uses: radcortez/project-metadata-action@master
@@ -23,7 +23,7 @@ jobs:
   verify-release:
     runs-on: ubuntu-18.04
     needs: ["release"]
-    if: github.event.pull_request.merged == true && github.repository_owner == 'Apicurio'
+    if: github.event.pull_request.merged == true
     steps:
       - name: Retrieve Project Metadata
         uses: radcortez/project-metadata-action@master
