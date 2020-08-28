@@ -1,0 +1,9 @@
+{
+  "excludes" : "^(?!.*/pom\\.xml$).*/.*\\.xml$",
+  "checksum-only" : false,
+  "checksum-type" : "md5",
+  "koji-hub-url" : "http://brewhub.engineering.redhat.com/brewhub",
+  "koji-web-url" : "https://brewweb.engineering.redhat.com/brew",
+  "pnc-url":"http://orch.psi.redhat.com"
+}
+
