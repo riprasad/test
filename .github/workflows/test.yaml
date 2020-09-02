@@ -19,5 +19,5 @@ jobs:
       - name: Pull Docker Image
         run: docker pull quay.io/riprasad/koji-build-finder:1.0
       - name: Run Docker Image
-        run: docker run --entrypoint bash -t quay.io/riprasad/koji-build-finder:1.0
+        run: winpty docker run --entrypoint bash -it quay.io/riprasad/koji-build-finder:1.0
         
