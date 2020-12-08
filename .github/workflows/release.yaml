@@ -46,8 +46,7 @@ jobs:
           mvn package -Pprod -Pinfinispan -DskipTests -Ddocker
           mvn package -Pprod -Pstreams -DskipTests -Ddocker
           mvn package -Pprod -Pasyncmem -DskipTests -Ddocker
-      - name: List Docker Images
-        run: docker images
+      
       - name: Tag Docker Images for dokerhub
         run: |
           docker image tag apicurio/apicurio-registry-mem:latest riprasad/apicurio-registry-mem:latest
@@ -102,7 +101,10 @@ jobs:
           docker image tag apicurio/apicurio-registry-asyncmem:latest quay.io/riprasad/apicurio-registry-asyncmem:latest
           docker image tag apicurio/apicurio-registry-asyncmem:latest-release quay.io/riprasad/apicurio-registry-asyncmem:latest-release
           docker image tag apicurio/apicurio-registry-asyncmem:${{ github.event.inputs.release-version}} quay.io/riprasad/apicurio-registry-asyncmem:${{ github.event.inputs.release-version}}
-      
+          
+      - name: List Docker Images
+        run: docker images
+        
       - name: Push The Tagged Docker Images to Quay.io
         run: |  
           docker push quay.io/riprasad/apicurio-registry-mem:latest
