@@ -42,6 +42,8 @@ jobs:
           mvn package -Pprod -Pinfinispan -DskipTests -Ddocker
           mvn package -Pprod -Pstreams -DskipTests -Ddocker
           mvn package -Pprod -Pasyncmem -DskipTests -Ddocker
+      - name: List Docker Images
+        run: docker images
       - name: Tag Docker Images for dokerhub
         run: |
           cd registry
