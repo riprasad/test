@@ -87,7 +87,7 @@ jobs:
       - name: Tag Docker Images for Quay.io
         run: |
           docker image tag apicurio/apicurio-registry-mem:latest quay.io/riprasad/apicurio-registry-mem:latest
-          docker image tag apicurio/apicurio-registry-mem:latest-release quay.io/riprasad-registry-mem:latest-release
+          docker image tag apicurio/apicurio-registry-mem:latest-release quay.io/riprasad/apicurio-registry-mem:latest-release
           docker image tag apicurio/apicurio-registry-mem:${{ github.event.inputs.release-version}} quay.io/riprasad/apicurio-registry-mem:${{ github.event.inputs.release-version}}
           docker image tag apicurio/apicurio-registry-sql:latest quay.io/riprasad/apicurio-registry-sql:latest
           docker image tag apicurio/apicurio-registry-sql:latest-release quay.io/riprasad/apicurio-registry-sql:latest-release
