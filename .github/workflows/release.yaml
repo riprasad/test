@@ -27,7 +27,7 @@ jobs:
           git config --global user.email "apicurio.ci@gmail.com"
           git remote add origin "https://github.com/Apicurio/apicurio-registry.git"
           git fetch
-          git pull
+          git pull origin master
       - name: Build Registry (All Variants)
         run: |
           cd registry
