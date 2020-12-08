@@ -1,6 +1,10 @@
 name: Release Workflow
 on:
   workflow_dispatch:
+    inputs:      
+      release-version:
+        description: 'Version being released'
+        required: true
       branch:
         description: 'Branch to release from'
         required: true
@@ -44,42 +48,40 @@ jobs:
           mvn package -Pprod -Pasyncmem -DskipTests -Ddocker
       - name: List Docker Images
         run: docker images
-    #  - name: Tag Docker Images for dokerhub
-    #    run: |
-    #      cd registry
-    #      docker image tag apicurio/apicurio-registry-mem:latest riprasad/apicurio/apicurio-registry-mem:latest
-    #      docker image tag apicurio/apicurio-registry-mem:latest-release riprasad/apicurio/apicurio-registry-mem:latest-release
-    #      docker image tag apicurio/apicurio-registry-mem:${{ github.event.inputs.release-version}} riprasad/apicurio/apicurio-registry-mem:${{ github.event.inputs.release-version}}
-    #      docker image tag apicurio/apicurio-registry-sql:latest riprasad/apicurio/apicurio-registry-sql:latest
-    #      docker image tag apicurio/apicurio-registry-sql:latest-release riprasad/apicurio/apicurio-registry-sql:latest-release
-    #      docker image tag apicurio/apicurio-registry-sql:${{ github.event.inputs.release-version}} riprasad/apicurio/apicurio-registry-sql:${{ github.event.inputs.release-version}}
-    #      docker image tag apicurio/apicurio-registry-infinispan:latest riprasad/apicurio/apicurio-registry-infinispan:latest
-    #      docker image tag apicurio/apicurio-registry-infinispan:latest-release riprasad/apicurio/apicurio-registry-infinispan:latest-release
-    #      docker image tag apicurio/apicurio-registry-infinispan:${{ github.event.inputs.release-version}} riprasad/apicurio/apicurio-registry-infinispan:${{ github.event.inputs.release-version}}
-    #      docker image tag apicurio/apicurio-registry-streams:latest riprasad/apicurio/apicurio-registry-streams:latest
-    #      docker image tag apicurio/apicurio-registry-streams:latest-release riprasad/apicurio/apicurio-registry-streams:latest-release
-    #      docker image tag apicurio/apicurio-registry-streams:${{ github.event.inputs.release-version}} riprasad/apicurio/apicurio-registry-streams:${{ github.event.inputs.release-version}}
-    #      docker image tag apicurio/apicurio-registry-asyncmem:latest riprasad/apicurio/apicurio-registry-asyncmem:latest
-    #      docker image tag apicurio/apicurio-registry-asyncmem:latest-release riprasad/apicurio/apicurio-registry-asyncmem:latest-release
-    #      docker image tag apicurio/apicurio-registry-asyncmem:${{ github.event.inputs.release-version}} riprasad/apicurio/apicurio-registry-asyncmem:${{ github.event.inputs.release-version}}
-    #  - name: Push The Tagged Docker Images to Dockerhub
-    #    run: |
-    #      cd registry
-    #      docker push riprasad/apicurio/apicurio-registry-mem:latest
-    #      docker push riprasad/apicurio/apicurio-registry-mem:latest-release
-    #      docker push riprasad/apicurio/apicurio-registry-mem:${{ github.event.inputs.release-version}}
-    #      docker push riprasad/apicurio/apicurio-registry-sql:latest
-    #      docker push riprasad/apicurio/apicurio-registry-sql:latest-release
-    #      docker push riprasad/apicurio/apicurio-registry-sql:${{ github.event.inputs.release-version}}
-    #      docker push riprasad/apicurio/apicurio-registry-infinispan:latest
-    #      docker push riprasad/apicurio/apicurio-registry-infinispan:latest-release
-    #      docker push riprasad/apicurio/apicurio-registry-infinispan:${{ github.event.inputs.release-version}}
-    #      docker push riprasad/apicurio/apicurio-registry-streams:latest
-    #      docker push riprasad/apicurio/apicurio-registry-streams:latest-release
-    #      docker push riprasad/apicurio/apicurio-registry-streams:${{ github.event.inputs.release-version}}
-    #      docker push riprasad/apicurio/apicurio-registry-asyncmem:latest
-    #      docker push riprasad/apicurio/apicurio-registry-asyncmem:latest-release
-    #      docker push riprasad/apicurio/apicurio-registry-asyncmem:${{ github.event.inputs.release-version}}
+      - name: Tag Docker Images for dokerhub
+        run: |
+          docker image tag apicurio/apicurio-registry-mem:latest riprasad/apicurio/apicurio-registry-mem:latest
+          docker image tag apicurio/apicurio-registry-mem:latest-release riprasad/apicurio/apicurio-registry-mem:latest-release
+          docker image tag apicurio/apicurio-registry-mem:${{ github.event.inputs.release-version}} riprasad/apicurio/apicurio-registry-mem:${{ github.event.inputs.release-version}}
+          docker image tag apicurio/apicurio-registry-sql:latest riprasad/apicurio/apicurio-registry-sql:latest
+          docker image tag apicurio/apicurio-registry-sql:latest-release riprasad/apicurio/apicurio-registry-sql:latest-release
+          docker image tag apicurio/apicurio-registry-sql:${{ github.event.inputs.release-version}} riprasad/apicurio/apicurio-registry-sql:${{ github.event.inputs.release-version}}
+          docker image tag apicurio/apicurio-registry-infinispan:latest riprasad/apicurio/apicurio-registry-infinispan:latest
+          docker image tag apicurio/apicurio-registry-infinispan:latest-release riprasad/apicurio/apicurio-registry-infinispan:latest-release
+          docker image tag apicurio/apicurio-registry-infinispan:${{ github.event.inputs.release-version}} riprasad/apicurio/apicurio-registry-infinispan:${{ github.event.inputs.release-version}}
+          docker image tag apicurio/apicurio-registry-streams:latest riprasad/apicurio/apicurio-registry-streams:latest
+          docker image tag apicurio/apicurio-registry-streams:latest-release riprasad/apicurio/apicurio-registry-streams:latest-release
+          docker image tag apicurio/apicurio-registry-streams:${{ github.event.inputs.release-version}} riprasad/apicurio/apicurio-registry-streams:${{ github.event.inputs.release-version}}
+          docker image tag apicurio/apicurio-registry-asyncmem:latest riprasad/apicurio/apicurio-registry-asyncmem:latest
+          docker image tag apicurio/apicurio-registry-asyncmem:latest-release riprasad/apicurio/apicurio-registry-asyncmem:latest-release
+          docker image tag apicurio/apicurio-registry-asyncmem:${{ github.event.inputs.release-version}} riprasad/apicurio/apicurio-registry-asyncmem:${{ github.event.inputs.release-version}}
+      - name: Push The Tagged Docker Images to Dockerhub
+        run: |
+          docker push riprasad/apicurio/apicurio-registry-mem:latest
+          docker push riprasad/apicurio/apicurio-registry-mem:latest-release
+          docker push riprasad/apicurio/apicurio-registry-mem:${{ github.event.inputs.release-version}}
+          docker push riprasad/apicurio/apicurio-registry-sql:latest
+          docker push riprasad/apicurio/apicurio-registry-sql:latest-release
+          docker push riprasad/apicurio/apicurio-registry-sql:${{ github.event.inputs.release-version}}
+          docker push riprasad/apicurio/apicurio-registry-infinispan:latest
+          docker push riprasad/apicurio/apicurio-registry-infinispan:latest-release
+          docker push riprasad/apicurio/apicurio-registry-infinispan:${{ github.event.inputs.release-version}}
+          docker push riprasad/apicurio/apicurio-registry-streams:latest
+          docker push riprasad/apicurio/apicurio-registry-streams:latest-release
+          docker push riprasad/apicurio/apicurio-registry-streams:${{ github.event.inputs.release-version}}
+          docker push riprasad/apicurio/apicurio-registry-asyncmem:latest
+          docker push riprasad/apicurio/apicurio-registry-asyncmem:latest-release
+          docker push riprasad/apicurio/apicurio-registry-asyncmem:${{ github.event.inputs.release-version}}
       - name: Login to Quay.io Registry
         run: docker login -u "${{ secrets.QUAY_USERNAME }}" -p "${{ secrets.QUAY_PASSWORD }}" quay.io
         
@@ -102,8 +104,7 @@ jobs:
           docker image tag apicurio/apicurio-registry-asyncmem:${{ github.event.inputs.release-version}} quay.io/riprasad/apicurio/apicurio-registry-asyncmem:${{ github.event.inputs.release-version}}
       
       - name: Push The Tagged Docker Images to Quay.io
-        run: |
-          cd registry
+        run: |  
           docker push quay.io/riprasad/apicurio/apicurio-registry-mem:latest
           docker push quay.io/riprasad/apicurio/apicurio-registry-mem:latest-release
           docker push quay.io/riprasad/apicurio/apicurio-registry-mem:${{ github.event.inputs.release-version}}
