@@ -27,8 +27,6 @@ jobs:
           git config --global user.email "apicurio.ci@gmail.com"
           git remote add origin "https://github.com/Apicurio/apicurio-registry.git"
           git fetch
-          git checkout ${{ github.event.inputs.branch}}
-          git branch --set-upstream-to=origin/${{ github.event.inputs.branch}}
           git pull
       - name: Build Registry (All Variants)
         run: |
