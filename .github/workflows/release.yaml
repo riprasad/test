@@ -41,97 +41,57 @@ jobs:
       - name: Build The Tagged Docker Images
         run: |
           cd registry/distro/docker
-          mvn package -Pprod -DskipTests -Ddocker
-          mvn package -Pprod -Psql -DskipTests -Ddocker
-          mvn package -Pprod -Pinfinispan -DskipTests -Ddocker
-          mvn package -Pprod -Pstreams -DskipTests -Ddocker
-          mvn package -Pprod -Pasyncmem -DskipTests -Ddocker
-          mvn package -Pprod -Pkafkasql -DskipTests -Ddocker
+          mvn package -Pprod -DskipTests -Ddocker -Ddocker.tag.name=latest-snapshot
+          mvn package -Pprod -Psql -DskipTests -Ddocker -Ddocker.tag.name=latest-snapshot
+          mvn package -Pprod -Pinfinispan -DskipTests -Ddocker -Ddocker.tag.name=latest-snapshot
+          mvn package -Pprod -Pstreams -DskipTests -Ddocker -Ddocker.tag.name=latest-snapshot
+          mvn package -Pprod -Pasyncmem -DskipTests -Ddocker -Ddocker.tag.name=latest-snapshot
+          mvn package -Pprod -Pkafkasql -DskipTests -Ddocker -Ddocker.tag.name=latest-snapshot
+          
+      - name: List Docker Images
+        run: docker images
       
       - name: Tag Docker Images for dokerhub
         run: |
-          docker image tag apicurio/apicurio-registry-mem:latest riprasad/apicurio-registry-mem:latest
-          docker image tag apicurio/apicurio-registry-mem:latest-release riprasad/apicurio-registry-mem:latest-release
-          docker image tag apicurio/apicurio-registry-mem:${{ github.event.inputs.release-version}} riprasad/apicurio-registry-mem:${{ github.event.inputs.release-version}}
-          docker image tag apicurio/apicurio-registry-sql:latest riprasad/apicurio-registry-sql:latest
-          docker image tag apicurio/apicurio-registry-sql:latest-release riprasad/apicurio-registry-sql:latest-release
-          docker image tag apicurio/apicurio-registry-sql:${{ github.event.inputs.release-version}} riprasad/apicurio-registry-sql:${{ github.event.inputs.release-version}}
-          docker image tag apicurio/apicurio-registry-infinispan:latest riprasad/apicurio-registry-infinispan:latest
-          docker image tag apicurio/apicurio-registry-infinispan:latest-release riprasad/apicurio-registry-infinispan:latest-release
-          docker image tag apicurio/apicurio-registry-infinispan:${{ github.event.inputs.release-version}} riprasad/apicurio-registry-infinispan:${{ github.event.inputs.release-version}}
-          docker image tag apicurio/apicurio-registry-streams:latest riprasad/apicurio-registry-streams:latest
-          docker image tag apicurio/apicurio-registry-streams:latest-release riprasad/apicurio-registry-streams:latest-release
-          docker image tag apicurio/apicurio-registry-streams:${{ github.event.inputs.release-version}} riprasad/apicurio-registry-streams:${{ github.event.inputs.release-version}}
-          docker image tag apicurio/apicurio-registry-asyncmem:latest riprasad/apicurio-registry-asyncmem:latest
-          docker image tag apicurio/apicurio-registry-asyncmem:latest-release riprasad/apicurio-registry-asyncmem:latest-release
-          docker image tag apicurio/apicurio-registry-asyncmem:${{ github.event.inputs.release-version}} riprasad/apicurio-registry-asyncmem:${{ github.event.inputs.release-version}}
-          docker image tag apicurio/apicurio-registry-kafkasql:latest riprasad/apicurio-registry-kafkasql:latest
-          docker image tag apicurio/apicurio-registry-kafkasql:latest-release riprasad/apicurio-registry-kafkasql:latest-release
-          docker image tag apicurio/apicurio-registry-kafkasql:${{ github.event.inputs.release-version}} riprasad/apicurio-registry-kafkasql:${{ github.event.inputs.release-version}}
+          docker image tag apicurio/apicurio-registry-mem:latest-snapshot riprasad/apicurio-registry-mem:latest-snapshot
+          docker image tag apicurio/apicurio-registry-sql:latest-snapshot riprasad/apicurio-registry-sql:latest-snapshot
+          docker image tag apicurio/apicurio-registry-infinispan:latest-snapshot riprasad/apicurio-registry-infinispan:latest-snapshot
+          docker image tag apicurio/apicurio-registry-streams:latest-snapshot riprasad/apicurio-registry-streams:latest-snapshot
+          docker image tag apicurio/apicurio-registry-asyncmem:latest-snapshot riprasad/apicurio-registry-asyncmem:latest-snapshot
+          docker image tag apicurio/apicurio-registry-kafkasql:latest-snapshot riprasad/apicurio-registry-kafkasql:latest-snapshot
+          
+      - name: List Docker Images
+        run: docker images
+        
       - name: Push The Tagged Docker Images to Dockerhub
         run: |
-          docker push riprasad/apicurio-registry-mem:latest
-          docker push riprasad/apicurio-registry-mem:latest-release
-          docker push riprasad/apicurio-registry-mem:${{ github.event.inputs.release-version}}
-          docker push riprasad/apicurio-registry-sql:latest
-          docker push riprasad/apicurio-registry-sql:latest-release
-          docker push riprasad/apicurio-registry-sql:${{ github.event.inputs.release-version}}
-          docker push riprasad/apicurio-registry-infinispan:latest
-          docker push riprasad/apicurio-registry-infinispan:latest-release
-          docker push riprasad/apicurio-registry-infinispan:${{ github.event.inputs.release-version}}
-          docker push riprasad/apicurio-registry-streams:latest
-          docker push riprasad/apicurio-registry-streams:latest-release
-          docker push riprasad/apicurio-registry-streams:${{ github.event.inputs.release-version}}
-          docker push riprasad/apicurio-registry-asyncmem:latest
-          docker push riprasad/apicurio-registry-asyncmem:latest-release
-          docker push riprasad/apicurio-registry-asyncmem:${{ github.event.inputs.release-version}}
-          docker push riprasad/apicurio-registry-kafkasql:latest
-          docker push riprasad/apicurio-registry-kafkasql:latest-release
-          docker push riprasad/apicurio-registry-kafkasql:${{ github.event.inputs.release-version}}
+          docker push riprasad/apicurio-registry-mem:latest-snapshot
+          docker push riprasad/apicurio-registry-sql:latest-snapshot
+          docker push riprasad/apicurio-registry-infinispan:latest-snapshot
+          docker push riprasad/apicurio-registry-streams:latest-snapshot
+          docker push riprasad/apicurio-registry-asyncmem:latest-snapshot
+          docker push riprasad/apicurio-registry-kafkasql:latest-snapshot
+          
       - name: Login to Quay.io Registry
         run: docker login -u "${{ secrets.QUAY_USERNAME }}" -p "${{ secrets.QUAY_PASSWORD }}" quay.io
         
       - name: Tag Docker Images for Quay.io
         run: |
-          docker image tag apicurio/apicurio-registry-mem:latest quay.io/riprasad/apicurio-registry-mem:latest
-          docker image tag apicurio/apicurio-registry-mem:latest-release quay.io/riprasad/apicurio-registry-mem:latest-release
-          docker image tag apicurio/apicurio-registry-mem:${{ github.event.inputs.release-version}} quay.io/riprasad/apicurio-registry-mem:${{ github.event.inputs.release-version}}
-          docker image tag apicurio/apicurio-registry-sql:latest quay.io/riprasad/apicurio-registry-sql:latest
-          docker image tag apicurio/apicurio-registry-sql:latest-release quay.io/riprasad/apicurio-registry-sql:latest-release
-          docker image tag apicurio/apicurio-registry-sql:${{ github.event.inputs.release-version}} quay.io/riprasad/apicurio-registry-sql:${{ github.event.inputs.release-version}}
-          docker image tag apicurio/apicurio-registry-infinispan:latest quay.io/riprasad/apicurio-registry-infinispan:latest
-          docker image tag apicurio/apicurio-registry-infinispan:latest-release quay.io/riprasad/apicurio-registry-infinispan:latest-release
-          docker image tag apicurio/apicurio-registry-infinispan:${{ github.event.inputs.release-version}} quay.io/riprasad/apicurio-registry-infinispan:${{ github.event.inputs.release-version}}
-          docker image tag apicurio/apicurio-registry-streams:latest quay.io/riprasad/apicurio-registry-streams:latest
-          docker image tag apicurio/apicurio-registry-streams:latest-release quay.io/riprasad/apicurio-registry-streams:latest-release
-          docker image tag apicurio/apicurio-registry-streams:${{ github.event.inputs.release-version}} quay.io/riprasad/apicurio-registry-streams:${{ github.event.inputs.release-version}}
-          docker image tag apicurio/apicurio-registry-asyncmem:latest quay.io/riprasad/apicurio-registry-asyncmem:latest
-          docker image tag apicurio/apicurio-registry-asyncmem:latest-release quay.io/riprasad/apicurio-registry-asyncmem:latest-release
-          docker image tag apicurio/apicurio-registry-asyncmem:${{ github.event.inputs.release-version}} quay.io/riprasad/apicurio-registry-asyncmem:${{ github.event.inputs.release-version}}
-          docker image tag apicurio/apicurio-registry-kafkasql:latest quay.io/riprasad/apicurio-registry-kafkasql:latest
-          docker image tag apicurio/apicurio-registry-kafkasql:latest-release quay.io/riprasad/apicurio-registry-kafkasql:latest-release
-          docker image tag apicurio/apicurio-registry-kafkasql:${{ github.event.inputs.release-version}} quay.io/riprasad/apicurio-registry-kafkasql:${{ github.event.inputs.release-version}}
+          docker image tag apicurio/apicurio-registry-mem:latest-snapshot quay.io/riprasad/apicurio-registry-mem:latest-snapshot
+          docker image tag apicurio/apicurio-registry-sql:latest-snapshot quay.io/riprasad/apicurio-registry-sql:latest-snapshot
+          docker image tag apicurio/apicurio-registry-infinispan:latest-snapshot quay.io/riprasad/apicurio-registry-infinispan:latest-snapshot
+          docker image tag apicurio/apicurio-registry-streams:latest-snapshot quay.io/riprasad/apicurio-registry-streams:latest-snapshot
+          docker image tag apicurio/apicurio-registry-asyncmem:latest-snapshot quay.io/riprasad/apicurio-registry-asyncmem:latest-snapshot
+          docker image tag apicurio/apicurio-registry-kafkasql:latest-snapshot quay.io/riprasad/apicurio-registry-kafkasql:latest-snapshot
           
       - name: List Docker Images
         run: docker images
         
       - name: Push The Tagged Docker Images to Quay.io
         run: |  
-          docker push quay.io/riprasad/apicurio-registry-mem:latest
-          docker push quay.io/riprasad/apicurio-registry-mem:latest-release
-          docker push quay.io/riprasad/apicurio-registry-mem:${{ github.event.inputs.release-version}}
-          docker push quay.io/riprasad/apicurio-registry-sql:latest
-          docker push quay.io/riprasad/apicurio-registry-sql:latest-release
-          docker push quay.io/riprasad/apicurio-registry-sql:${{ github.event.inputs.release-version}}
-          docker push quay.io/riprasad/apicurio-registry-infinispan:latest
-          docker push quay.io/riprasad/apicurio-registry-infinispan:latest-release
-          docker push quay.io/riprasad/apicurio-registry-infinispan:${{ github.event.inputs.release-version}}
-          docker push quay.io/riprasad/apicurio-registry-streams:latest
-          docker push quay.io/riprasad/apicurio-registry-streams:latest-release
-          docker push quay.io/riprasad/apicurio-registry-streams:${{ github.event.inputs.release-version}}
-          docker push quay.io/riprasad/apicurio-registry-asyncmem:latest
-          docker push quay.io/riprasad/apicurio-registry-asyncmem:latest-release
-          docker push quay.io/riprasad/apicurio-registry-asyncmem:${{ github.event.inputs.release-version}}
-          docker push quay.io/riprasad/apicurio-registry-kafkasql:latest
-          docker push quay.io/riprasad/apicurio-registry-kafkasql:latest-release
-          docker push quay.io/riprasad/apicurio-registry-kafkasql:${{ github.event.inputs.release-version}}
+          docker push quay.io/riprasad/apicurio-registry-mem:latest-snapshot
+          docker push quay.io/riprasad/apicurio-registry-sql:latest-snapshot
+          docker push quay.io/riprasad/apicurio-registry-infinispan:latest-snapshot
+          docker push quay.io/riprasad/apicurio-registry-streams:latest-snapshot
+          docker push quay.io/riprasad/apicurio-registry-asyncmem:latest-snapshot
+          docker push quay.io/riprasad/apicurio-registry-kafkasql:latest-snapshot
