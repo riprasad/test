@@ -9,7 +9,7 @@ BRANCH_REF="$1"
 BRANCH_NAME=${BRANCH_REF#refs/heads/}
 
 
-case $BRANCH_NAME in
+case $BRANCH_REF in
 
     "refs/heads/master")
        # if master branch
