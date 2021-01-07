@@ -1,0 +1,14 @@
+name: Test Workflow
+on:
+  push:
+    branches: [master, 1.2.x, 2.0.x]
+
+jobs:
+  test-push:
+    name: Verify Build
+    runs-on: ubuntu-18.04    
+    steps:
+      - name: Print Branch
+        run: |
+          echo "Master Branch"
+          echo "${{ github.ref }}"
