@@ -1,7 +1,7 @@
 name: Test Workflow
 on:
   push:
-    branches: [master, 1.2.x, 2.0.x]
+    branches: [master]
 
 jobs:
   test-push:
@@ -10,5 +10,12 @@ jobs:
     steps:
       - name: Print Branch
         run: |
-          echo "Master Branch"
           echo "${{ github.ref }}"
+
+      - name: Checkout Code With Branch ${{ github.ref }}
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+
+      - name: list directory
+        uses: ls -lrt
