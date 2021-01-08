@@ -1,7 +1,7 @@
 name: Test Pull Request
 on:
   pull_request:
-    branches: [master]
+    branches: [test-123]
 
 jobs:
   verify-build:
@@ -10,5 +10,7 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+      - name: echo branch name
+        run: echo "${{ github.ref }}"
       - name: Build
         run: mvn clean install
