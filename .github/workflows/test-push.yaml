@@ -1,0 +1,20 @@
+name: Test Push Workflow
+on:
+  push:
+    branches: [test-234]
+
+jobs:
+  test-push:
+    name: Verify Build
+    runs-on: ubuntu-18.04    
+    steps:
+      - name: Print Branch
+        run: |
+          echo "Master Branch"
+          echo "${{ github.ref }}"
+
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: list directory
+        run: ls -lrt
