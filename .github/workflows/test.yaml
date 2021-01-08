@@ -18,4 +18,4 @@ jobs:
           ref: ${{ github.ref }}
 
       - name: list directory
-        uses: ls -lrt
+        run: ls -lrt
