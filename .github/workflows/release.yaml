@@ -1,0 +1,94 @@
+name: Release Workflow
+on:
+  workflow_dispatch:
+    inputs:
+      release-version:
+        description: 'Version being released'
+        required: true
+      snapshot-version:
+        description: 'Next snapshot version'
+        required: true
+      branch:
+        description: 'Branch to release from'
+        required: true
+        default: 'master'
+jobs:
+  release:
+    runs-on: ubuntu-18.04
+    #if: github.repository_owner == 'Apicurio'
+    steps:
+      - name: Log Metadata
+        run: |
+          echo "Releasing Apicurio Registry version ${{ github.event.inputs.release-version }} from branch ${{ github.event.inputs.branch }}"
+          echo "Next Snapshot version will be ${{ github.event.inputs.snapshot-version }}"
+
+      - name: Set up JDK 1.8
+        uses: AdoptOpenJDK/install-jdk@v1
+        with:
+            version: '8'
+            architecture: x64
+
+      - name: Set up settings.xml
+        run: |
+          pwd
+          mkdir -p /home/runner/.m2
+          chmod 755 /home/runner/.m2
+          echo "<settings><servers><server><id>${{ secrets.OSSRH_ID }}</id><username>${{ secrets.OSSRH_USERNAME }}</username><password>${{ secrets.OSSRH_TOKEN }}</password></server></servers><profiles><profile><id>${{ secrets.OSSRH_ID }}</id><activation><activeByDefault>true</activeByDefault></activation><properties><gpg.executable>gpg</gpg.executable><gpg.passphrase>${{ secrets.GPG_PASSPHRASE}}</gpg.passphrase></properties></profile></profiles></settings>" > /home/runner/.m2/settings.xml
+          cat /home/runner/.m2/settings.xml
+
+      - name: Apicurio Registry Checkout
+        run: |
+          mkdir registry
+          cd registry
+          git init
+          git config --global user.name "apicurio-ci"
+          git config --global user.email "apicurio.ci@gmail.com"
+          git remote add origin "https://github.com/Apicurio/apicurio-registry.git"
+          git fetch
+          git checkout ${{ github.event.inputs.branch}}
+          git branch --set-upstream-to=origin/${{ github.event.inputs.branch}}
+      - name: Update Release Version ${{ github.event.inputs.release-version}}
+        run: |
+          cd registry
+          mvn versions:set -DnewVersion=${{ github.event.inputs.release-version}} -DgenerateBackupPoms=false -DprocessAllModules=true
+          sed -i  "s/version\:\s.*/version: \'${{ github.event.inputs.release-version}}\'/g" docs/antora.yml
+          sed -i  "5s/\"version\"\:\s\".*\"/\"version\": \"${{ github.event.inputs.release-version}}\"/g" common/src/main/resources/META-INF/openapi.json
+          
+      - name: Build Registry (All Variants) # BRANCH_REF="$1" SKIP_TESTS_FLAG="$2"
+        run: |
+          cd registry
+          ./.github/scripts/build-project-all-variants.sh refs/heads/${{ github.event.inputs.branch}} true
+
+      - name: Login to DockerHub Registry
+        run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+      - name: Build The Release Docker Images
+        run: |
+          cd registry
+          ./.github/scripts/build-release-images-for-docker.sh ${{ github.event.inputs.branch}}
+      
+      - name: Tag Release Docker Images for Quay.io
+        run: ./.github/scripts/tag-release-images-for-docker.sh ${{ github.event.inputs.branch}} ${{ github.event.inputs.release-version}}
+          
+      - name: List All The Tagged Docker Images
+        run: docker images
+          
+      - name: Push The Release Docker Images To Dockerhub 
+        run: ./.github/scripts/push-release-images-to-docker.sh ${{ github.event.inputs.branch}} ${{ github.event.inputs.release-version}}
+          
+      - name: Login to Quay.io Registry
+        run: docker login -u "${{ secrets.QUAY_USERNAME }}" -p "${{ secrets.QUAY_PASSWORD }}" quay.io
+      
+      - name: Tag Release Docker Images for Quay.io
+        run: ./.github/scripts/tag-release-images-for-quay.sh ${{ github.event.inputs.branch}} ${{ github.event.inputs.release-version}}
+          
+      - name: List All The Tagged Docker Images
+        run: docker images
+       
+      - name: Push The Release Docker Images to Quay.io
+        run: ./.github/scripts/push-release-images-to-quay.sh ${{ github.event.inputs.branch}} ${{ github.event.inputs.release-version}}
+        
+      - name: Maven Deploy
+        run: |
+          cd registry
+          ./.github/scripts/maven-deploy.sh ${{ github.event.inputs.branch}}
