@@ -17,6 +17,9 @@ jobs:
     runs-on: ubuntu-18.04
     #if: github.repository_owner == 'Apicurio'
     steps:
+      - name: Checkout Code With Ref '${{ github.ref }}'
+        uses: actions/checkout@v2
+        
       - name: Log Metadata
         run: |
           echo "Releasing Apicurio Registry version ${{ github.event.inputs.release-version }} from branch ${{ github.event.inputs.branch }}"
