@@ -15,7 +15,7 @@ on:
 jobs:
   release:
     runs-on: ubuntu-18.04
-    if: github.repository_owner == 'Apicurio'
+    #if: github.repository_owner == 'Apicurio'
     steps:
       - name: Checkout Code With Ref '${{ github.ref }}'
         uses: actions/checkout@v2
