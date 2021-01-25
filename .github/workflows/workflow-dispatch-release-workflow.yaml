@@ -52,17 +52,20 @@ jobs:
           git commit -m "Automated version update: ${{ github.event.inputs.release-version}}"
           git push
 
-      - name: Create GitHub Release
-        uses: actions/create-release@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-          tag_name: ${{ github.event.inputs.release-version}}       
-          release_name: ${{ github.event.inputs.release-version}}
+      - name: Create Github release
+        run: ./.github/scripts/create-github-release.sh ${{ github.event.inputs.release-version}} ${{ github.event.inputs.branch}} ${{GITHUB_REPOSITORY}} ${{ secrets.GITHUB_TOKEN }}
+
+      #- name: Create GitHub Release
+      #  uses: actions/create-release@latest
+      #  env:
+      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      #  with:
+      #    tag_name: ${{ github.event.inputs.release-version}}       
+      #    release_name: ${{ github.event.inputs.release-version}}
 
 
-      #- name: Generate Release Notes
-      #  run: gren release --token=${{ secrets.GITHUB_TOKEN }} --override
+      - name: Generate Release Notes
+        run: gren release --token=${{ secrets.GITHUB_TOKEN }} --override
 
       - name: Update Snapshot version ${{ github.event.inputs.snapshot-version}}
         run: mvn versions:set -DnewVersion=${{ github.event.inputs.snapshot-version}} -DgenerateBackupPoms=false -DprocessAllModules=true
