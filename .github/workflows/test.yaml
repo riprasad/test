@@ -6,9 +6,11 @@ on:
 
 jobs:
   test-push:
-    name: Verify Build
+    name: Test
     runs-on: ubuntu-18.04    
     steps:
-      - name: Print Branch
-        run: |
-          echo "${{ github.ref }}"
+      - name: Set Environment Variable
+        run: echo "LATEST_COMMIT_SHA=$(git log -n 1 --pretty=format:"%H")" >> $GITHUB_ENV
+      
+      - name: print environment variable
+        run: echo $LATEST_COMMIT_SHA
