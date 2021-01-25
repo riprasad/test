@@ -53,7 +53,7 @@ jobs:
           git push
 
       - name: Create Github release
-        run: ./.github/scripts/create-github-release.sh ${{ github.event.inputs.release-version}} ${{ github.event.inputs.branch}} $GITHUB_REPOSITORY ${{ secrets.GITHUB_TOKEN }}
+        run: ./.github/scripts/create-github-release.sh ${{ github.event.inputs.release-version}} ${{ github.event.inputs.branch}} ${{github.repository}} ${{ secrets.GITHUB_TOKEN }}
 
       #- name: Create GitHub Release
       #  uses: actions/create-release@latest
