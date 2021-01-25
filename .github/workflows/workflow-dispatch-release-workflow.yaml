@@ -73,7 +73,7 @@ jobs:
 
 
       - name: Generate Release Notes
-        run: gren release --token=${{ secrets.GITHUB_TOKEN }} --override
+        run: gren release --token=${{ secrets.GITHUB_TOKEN }} --override --prefix=v
 
       - name: Update Snapshot version ${{ github.event.inputs.snapshot-version}}
         run: mvn versions:set -DnewVersion=${{ github.event.inputs.snapshot-version}} -DgenerateBackupPoms=false -DprocessAllModules=true
