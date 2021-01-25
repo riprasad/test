@@ -74,7 +74,7 @@ jobs:
         with:
           tag_name: ${{ github.event.inputs.release-version}}       
           release_name: ${{ github.event.inputs.release-version}}
-          commitish: ${latest_commit_sha}
+          commitish: env.latest_commit_sha
 
 
       - name: Generate Release Notes
