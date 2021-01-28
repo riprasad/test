@@ -63,6 +63,9 @@ jobs:
       - name: Fetch Latest Commit SHA
         run: |
           echo "latest_commit_sha=$(git log -n 1 --pretty=format:"%H")" >> $GITHUB_ENV
+      
+      - name: Print environment variable
+        run: |
           echo "${{ env.latest_commit_sha }}"
           echo "${latest_commit_sha}"
 
@@ -70,20 +73,21 @@ jobs:
       #- name: Create Github release
       #  run: ./.github/scripts/create-github-release.sh ${{ github.event.inputs.release-version}} ${{ github.event.inputs.branch}} ${{github.repository}} ${{ secrets.GITHUB_TOKEN }}
       
-      - uses: ncipollo/release-action@v1
-        with:
-          tag: ${{ github.event.inputs.release-version}}
-          commit: ${{ env.latest_commit_sha }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-      
-      #- name: Create GitHub Release
-      #  uses: actions/create-release@latest
-      #  env:
-      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      #- uses: ncipollo/release-action@v1
       #  with:
-      #    tag_name: ${{ github.event.inputs.release-version}}       
-      #    release_name: ${{ github.event.inputs.release-version}}
-      #    commitish: $latest_commit_sha
+      #    tag: ${{ github.event.inputs.release-version}}
+      #    name: ${{ github.event.inputs.release-version}}
+      #    commit: ${{ env.latest_commit_sha }}
+      #    token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Create GitHub Release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.event.inputs.release-version}}       
+          release_name: ${{ github.event.inputs.release-version}}
+          commitish: ${{ env.latest_commit_sha }}
 
 
       - name: Generate Release Notes
