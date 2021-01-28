@@ -32,6 +32,8 @@ jobs:
         
       - name: Code Checkout
         run: |
+          mkdir test
+          cd test
           git init
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
@@ -44,10 +46,10 @@ jobs:
           find .
 
       - name: list Directory
-        run: ls -lrt
+        run: cd test && ls -lrt
 
       - name: Update Release Version ${{ github.event.inputs.release-version}}
-        run: mvn versions:set -DnewVersion=${{ github.event.inputs.release-version}} -DgenerateBackupPoms=false -DprocessAllModules=true
+        run: cd test && mvn versions:set -DnewVersion=${{ github.event.inputs.release-version}} -DgenerateBackupPoms=false -DprocessAllModules=true
 
 
       #- name: Verify Build
@@ -56,12 +58,14 @@ jobs:
 
       - name: Commit Release Version Change
         run: |
+          cd test
           git add .
           git commit -m "Automated version update: ${{ github.event.inputs.release-version}}"
           git push
           
       - name: Fetch Latest Commit SHA
         run: |
+          cd test
           echo "latest_commit_sha=$(git log -n 1 --pretty=format:"%H")" >> $GITHUB_ENV
       
       - name: Print environment variable
@@ -91,14 +95,15 @@ jobs:
 
 
       - name: Generate Release Notes
-        run: gren release --token=${{ secrets.GITHUB_TOKEN }} --override --prefix=v
+        run: cd test && gren release --token=${{ secrets.GITHUB_TOKEN }} --override --prefix=v
 
       - name: Update Snapshot version ${{ github.event.inputs.snapshot-version}}
-        run: mvn versions:set -DnewVersion=${{ github.event.inputs.snapshot-version}} -DgenerateBackupPoms=false -DprocessAllModules=true
+        run: cd test && mvn versions:set -DnewVersion=${{ github.event.inputs.snapshot-version}} -DgenerateBackupPoms=false -DprocessAllModules=true
 
 
       - name: Commit Snapshot Version Change
         run: |
+          cd test
           git add .
           git commit -m"Automated version update: ${{ github.event.inputs.snapshot-version}}"
           git push             
