@@ -1,0 +1,17 @@
+name: abc Workflow
+on: workflow_dispatch
+
+jobs:
+  test-push:
+    name: Test
+    runs-on: ubuntu-18.04    
+    steps:
+      
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        
+      - name: Set Environment Variable
+        run: echo "LATEST_COMMIT_SHA=$(git log -n 1 --pretty=format:"%H")" >> $GITHUB_ENV
+      
+      - name: print environment variable
+        run: echo "Latest Commit on Branch ${{ github.ref }} - ${LATEST_COMMIT_SHA}
