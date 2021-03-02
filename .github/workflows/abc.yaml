@@ -1,4 +1,4 @@
-name: abc Workflow
+name: quarkus Workflow
 on: workflow_dispatch
 
 jobs:
@@ -6,12 +6,21 @@ jobs:
     name: Test
     runs-on: ubuntu-18.04    
     steps:
-      
-      - name: Checkout Code
-        uses: actions/checkout@v2
         
-      - name: Set Environment Variable
-        run: echo "LATEST_COMMIT_SHA=$(git log -n 1 --pretty=format:"%H")" >> $GITHUB_ENV
+      - name: Set up JDK 11
+        uses: AdoptOpenJDK/install-jdk@v1
+        with:
+          version: '11'
+          architecture: x64
       
-      - name: print environment variable
-        run: echo "${LATEST_COMMIT_SHA}"
+      - name: Build Quarkus
+        run: git clone https://github.com/quarkusio/quarkus.git && cd quarkus && mvn -B clean install -DskipTests -DskipITs
+        
+      - name: Clone Registry
+        run: git clone https://github.com/Apicurio/apicurio-registry.git
+        
+      - name: Build Registry
+        run: cd apicurio-registry && ./mvnw -Pprod -Psql -Pstreams -Pasyncmem -Pkafkasql -Pinfinispan test package -Dquarkus.version=999-SNAPSHOT
+        
+      - name: Integration Tests
+        run: cd apicurio-registry && ./mvnw verify -Pall -pl tests -Dmaven.javadoc.skip=true -Dquarkus.version=999-SNAPSHOT
