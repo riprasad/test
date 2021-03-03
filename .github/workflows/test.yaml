@@ -1,5 +1,5 @@
 
-name: Test Workflow
+name: Test EMAIL Notification
 on:
   push:
     branches: [master, '[1-9].[1-9].x']
