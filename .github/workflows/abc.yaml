@@ -13,8 +13,8 @@ jobs:
           version: '11'
           architecture: x64
       
-      - name: Build Quarkus
-        run: git clone https://github.com/quarkusio/quarkus.git && cd quarkus && mvn -B clean install -DskipTests -DskipITs
+      #- name: Build Quarkus
+      #  run: git clone https://github.com/quarkusio/quarkus.git && cd quarkus && mvn -B clean install -DskipTests -DskipITs
         
       - name: Clone Registry
         run: git clone https://github.com/Apicurio/apicurio-registry.git
@@ -23,7 +23,7 @@ jobs:
         run: cd apicurio-registry && mvn -N io.takari:maven:wrapper -Dmaven=3.6.3
         
       - name: Build Registry
-        run: cd apicurio-registry && ./mvnw test package -Pprod -Psql -Pstreams -Pasyncmem -Pkafkasql -Dquarkus.version=999-SNAPSHOT #-Pinfinispan
+        run: cd apicurio-registry && ./mvnw test package -Pprod -Psql -Pstreams -Pasyncmem -Pkafkasql #-Dquarkus.version=999-SNAPSHOT #-Pinfinispan
         
       - name: Integration Tests
-        run: cd apicurio-registry && ./mvnw verify -Pall -pl tests -Dmaven.javadoc.skip=true -Dquarkus.version=999-SNAPSHOT
+        run: cd apicurio-registry && ./mvnw verify -Pall -pl tests -Dmaven.javadoc.skip=true #-Dquarkus.version=999-SNAPSHOT
