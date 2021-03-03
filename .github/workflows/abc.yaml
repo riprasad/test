@@ -19,8 +19,11 @@ jobs:
       - name: Clone Registry
         run: git clone https://github.com/Apicurio/apicurio-registry.git
         
+      - name: Get maven wrapper
+        run: cd apicurio-registry && mvn -N io.takari:maven:wrapper -Dmaven=3.6.3
+        
       - name: Build Registry
-        run: cd apicurio-registry && ./mvnw -Pprod -Psql -Pstreams -Pasyncmem -Pkafkasql -Pinfinispan test package -Dquarkus.version=999-SNAPSHOT
+        run: cd apicurio-registry && ./mvnw test package -Pprod -Psql -Pstreams -Pasyncmem -Pkafkasql -Dquarkus.version=999-SNAPSHOT #-Pinfinispan
         
       - name: Integration Tests
         run: cd apicurio-registry && ./mvnw verify -Pall -pl tests -Dmaven.javadoc.skip=true -Dquarkus.version=999-SNAPSHOT
