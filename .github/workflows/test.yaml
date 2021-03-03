@@ -1,5 +1,5 @@
 
-name: Test EMAIL Notification
+name: Test Notification
 on:
   push:
     branches: [master, '[1-9].[1-9].x']
@@ -17,7 +17,7 @@ jobs:
       - name: Google Chat Notification
         uses: Co-qn/google-chat-notification@releases/v1
         with:
-          name: Build
+          name: ${{ github.action }}
           url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
           status: ${{ job.status }}
         if: ${{ failure() }}
