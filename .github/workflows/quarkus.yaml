@@ -1,27 +1,27 @@
-    name: quarkus Workflow
-    on: workflow_dispatch
+name: quarkus Workflow
+on: workflow_dispatch
 
-    jobs:
+jobs:
     test-push:
         name: Test
         runs-on: ubuntu-18.04    
         steps:
             
         - name: Set up JDK 11
-            uses: AdoptOpenJDK/install-jdk@v1
-            with:
+          uses: AdoptOpenJDK/install-jdk@v1
+          with:
             version: '11'
             architecture: x64
 
         - name: Cache Dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-integration-tests-${{ hashFiles('**/pom.xml') }}
+          uses: actions/cache@v2
+          with:
+            path: ~/.m2/repository
+            key: ${{ runner.os }}-integration-tests-${{ hashFiles('**/pom.xml') }}
 
-      - name: Set test profile to all
-        run: |
-          echo "test_profile=all" >> $GITHUB_ENV
+        - name: Set test profile to all
+          run: |
+            echo "test_profile=all" >> $GITHUB_ENV
         
         #- name: Build Quarkus
         #  run: git clone https://github.com/quarkusio/quarkus.git && cd quarkus && mvn -B clean install -DskipTests -DskipITs
