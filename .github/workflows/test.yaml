@@ -4,6 +4,8 @@ on:
   push:
     branches: [master, '[1-9].[1-9].x']
   workflow_dispatch: {}
+  schedule:
+    - cron: '5 * * * *'
 
 jobs:
   test-push:
