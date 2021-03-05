@@ -17,13 +17,16 @@ jobs:
             architecture: x64
         
         - name: Build Quarkus
-          run: git clone https://github.com/quarkusio/quarkus.git && cd quarkus #&& mvn -B clean install -DskipTests -DskipITs            
+          run: |
+             pwd
+             git clone https://github.com/quarkusio/quarkus.git && cd quarkus #&& mvn -B clean install -DskipTests -DskipITs
+             ls -lrt
         
         - name: Checkout Code
           uses: actions/checkout@v2
           
         - name: view Files
-          run: ls -al
+          run: pwd && ls -al
             
         - name: Build Registry
           run: ./mvnw clean install -Pprod -Psql -Pstreams -Pkafkasql -Pmultitenancy -Pinfinispan #-Dquarkus.version=999-SNAPSHOT
