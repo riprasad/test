@@ -19,8 +19,8 @@ jobs:
         - name: Build Quarkus
           run: |
              pwd
-             git clone https://github.com/quarkusio/quarkus.git && cd quarkus #&& mvn -B clean install -DskipTests -DskipITs
-             ls -lrt
+             git clone https://github.com/quarkusio/quarkus.git && ls -lrt #&& cd quarkus && mvn -B clean install -DskipTests -DskipITs
+             
         
         - name: Checkout Code
           uses: actions/checkout@v2
