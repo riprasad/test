@@ -13,12 +13,6 @@ jobs:
             version: '11'
             architecture: x64
 
-        - name: Cache Dependencies
-          uses: actions/cache@v2
-          with:
-            path: ~/.m2/repository
-            key: ${{ runner.os }}-integration-tests-${{ hashFiles('**/pom.xml') }}
-
         - name: Set test profile to all
           run: |
             echo "test_profile=all" >> $GITHUB_ENV
