@@ -1,8 +1,8 @@
 name: Nightly Build # nightly job to run against Quarkus master so the issues are detected early.
 on: 
   workflow_dispatch: {}
-  schedule:
-    - cron: '15 * * * *'  # every minute
+  #schedule:
+  #  - cron: '15 * * * *'  # every minute
 
 jobs:
   test-push:
