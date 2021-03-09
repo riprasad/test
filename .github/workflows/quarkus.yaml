@@ -31,8 +31,8 @@ jobs:
         - name: Build integration-tests-common
           run: cd apicurio-registry && mvn install -Pintegration-tests -pl integration-tests/integration-tests-common
 
-        - name: Run Integration Tests - streams
-          run: cd apicurio-registry && ./mvnw verify -Pintegration-tests -P${{ env.test_profile }} -Pstreams -pl integration-tests/testsuite -Dmaven.javadoc.skip=true --no-transfer-progress
+        #- name: Run Integration Tests - streams
+        #  run: cd apicurio-registry && ./mvnw verify -Pintegration-tests -P${{ env.test_profile }} -Pstreams -pl integration-tests/testsuite -Dmaven.javadoc.skip=true --no-transfer-progress
 
         - name: Run Integration Tests - sql
           run: cd apicurio-registry && ./mvnw verify -Pintegration-tests -P${{ env.test_profile }} -Psql -pl integration-tests/testsuite -Dmaven.javadoc.skip=true --no-transfer-progress
