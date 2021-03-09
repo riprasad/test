@@ -26,7 +26,7 @@ jobs:
           run: cd apicurio-registry && mvn -N io.takari:maven:wrapper -Dmaven=3.6.3
             
         - name: Build Registry
-          run: cd apicurio-registry && ./mvnw clean install -Pprod -Psql -Pstreams -Pkafkasql -Pmultitenancy -Pinfinispan
+          run: cd apicurio-registry && ./mvnw clean install -Pprod -Psql -Pstreams -Pkafkasql -Pmultitenancy -Pinfinispan -DskipTests
 
         - name: Build integration-tests-common
           run: cd apicurio-registry && mvn install -Pintegration-tests -pl integration-tests/integration-tests-common
