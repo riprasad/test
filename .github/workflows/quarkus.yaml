@@ -25,11 +25,11 @@ jobs:
         - name: Get maven wrapper
           run: cd apicurio-registry && mvn -N io.takari:maven:wrapper -Dmaven=3.6.3
             
-        - name: Build Registry - asyncmem
-          run: cd apicurio-registry && ./mvnw clean install -Pprod -Pasyncmem
+        #- name: Build Registry - asyncmem
+        #  run: cd apicurio-registry && ./mvnw clean install -Pprod -Pasyncmem
           
         - name: Build Registry - infinispan
-          run: cd apicurio-registry && ./mvnw install -Pprod -Pinfinispan
+          run: cd apicurio-registry && ./mvnw clean install -Pprod -Pinfinispan
           
         - name: Build Registry - multitenacy
           run: cd apicurio-registry && ./mvnw install -Pprod -Pmultitenancy
