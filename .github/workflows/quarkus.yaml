@@ -1,8 +1,8 @@
-name: quarkus Workflow
+name: Registry Test Build
 on: workflow_dispatch
 
 jobs:
-    test-push:
+    test:
         name: Test
         runs-on: ubuntu-18.04    
         steps:
@@ -18,30 +18,16 @@ jobs:
             echo "test_profile=all" >> $GITHUB_ENV
             
         - name: Clone Registry
-          run: |
-                git clone https://github.com/Apicurio/apicurio-registry.git
-                cd apicurio-registry && git checkout create-bom
+          run: git clone https://github.com/Apicurio/apicurio-registry.git
+                
+        - name: Checkout `create-bom` branch
+          run: cd apicurio-registry && git checkout create-bom
             
         - name: Get maven wrapper
           run: cd apicurio-registry && mvn -N io.takari:maven:wrapper -Dmaven=3.6.3
             
-        #- name: Build Registry - asyncmem
-        #  run: cd apicurio-registry && ./mvnw clean install -Pprod -Pasyncmem
-          
-        #- name: Build Registry - infinispan
-        #  run: cd apicurio-registry && ./mvnw install -Pprod -Pinfinispan
-          
-        - name: Build Registry - multitenacy
-          run: cd apicurio-registry && ./mvnw clean install -Pprod -Pmultitenancy
-          
-        - name: Build Registry - streams
-          run: cd apicurio-registry && ./mvnw install -Pprod -Pstreams
-          
-        - name: Build Registry - kafkasql
-          run: cd apicurio-registry && ./mvnw install -Pprod -Pkafkasql
-          
-        - name: Build Registry - sql
-          run: cd apicurio-registry && ./mvnw install -Pprod -Psql
+        - name: Build Registry
+          run: cd apicurio-registry && ./mvnw clean install -Pprod -Pasyncmem -Pinfinispan -Psql -Pstreams -Pkafkasql -Pmultitenancy
 
         - name: Build integration-tests-common
           run: cd apicurio-registry && mvn install -Pintegration-tests -pl integration-tests/integration-tests-common
