@@ -28,11 +28,11 @@ jobs:
         #- name: Build Registry - asyncmem
         #  run: cd apicurio-registry && ./mvnw clean install -Pprod -Pasyncmem
           
-        - name: Build Registry - infinispan
-          run: cd apicurio-registry && ./mvnw clean install -Pprod -Pinfinispan
+        #- name: Build Registry - infinispan
+        #  run: cd apicurio-registry && ./mvnw install -Pprod -Pinfinispan
           
         - name: Build Registry - multitenacy
-          run: cd apicurio-registry && ./mvnw install -Pprod -Pmultitenancy
+          run: cd apicurio-registry && ./mvnw clean install -Pprod -Pmultitenancy
           
         - name: Build Registry - streams
           run: cd apicurio-registry && ./mvnw install -Pprod -Pstreams
