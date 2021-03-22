@@ -14,5 +14,5 @@ jobs:
             
         - name: Set up JDK 11
           run: |
-            chmod 777 test.sh
+            chmod 777 .github/scripts/test.shtest.sh
             ./.github/scripts/test.sh ${GITHUB_REF##*/}
