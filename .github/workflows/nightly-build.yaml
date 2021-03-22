@@ -9,7 +9,7 @@ jobs:
     steps:
     
         
-        - name: Checkout Code with Ref '${GITHUB_REF##*/}' 
+        - name: Checkout Code with Ref '${GITHUB_REF}' 
           uses: actions/checkout@v2
             
         - name: Set up JDK 11
