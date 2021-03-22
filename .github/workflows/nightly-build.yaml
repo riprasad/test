@@ -7,6 +7,10 @@ jobs:
     name: Test
     runs-on: ubuntu-18.04 
     steps:
+    
+        
+        - name: Checkout Code with Ref '${GITHUB_REF##*/}' 
+          uses: actions/checkout@v2
             
         - name: Set up JDK 11
           run: |
