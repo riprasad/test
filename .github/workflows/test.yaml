@@ -1,25 +1,28 @@
 
 name: Test Notification
 on:
-  push:
-    branches: [master, '[1-9].[1-9].x']
-  workflow_dispatch: {}
-  #schedule:
-  #  - cron: "*/5 * * * *"
+  workflow_dispatch:
+    inputs:
+      release-version:
+        description: 'Version being released'
+        required: true
+      snapshot-version:
+        description: 'Next snapshot version'
+        required: true
+      branch:
+        description: 'Branch to release from'
+        required: true
+        default: 'master'
 
 jobs:
   test-push:
     name: Test
     runs-on: ubuntu-18.04    
     steps:
+      - name: Checkout Code With Ref '${{ github.ref }}'
+        uses: actions/checkout@v2
+
       
-      - name: Print Message
-        run: abc
-        
-      - name: Google Chat Notification
-        uses: Co-qn/google-chat-notification@releases/v1
-        with:
-          name: ${{ github.workflow }}
-          url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
-          status: ${{ job.status }}
-        if: ${{ failure() }}
+      - name: Create GitHub Release
+        run: |
+          ./.github/scripts/create-github-release.sh ${{ github.event.inputs.release-version}} ${{ github.event.inputs.branch}} $GITHUB_REPOSITORY ${{ secrets.GITHUB_TOKEN }}
