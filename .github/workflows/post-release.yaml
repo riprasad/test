@@ -1,7 +1,7 @@
 name: Post-Release # nightly job to run against Quarkus master so the issues are detected early.
 on:
   release:
-    types: [published]
+    types: [published, created, released]
 
 jobs:
   test-push:
