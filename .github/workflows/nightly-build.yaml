@@ -1,6 +1,7 @@
-name: Nightly Build # nightly job to run against Quarkus master so the issues are detected early.
-on: 
-  workflow_dispatch: {}
+name: Post-Release # nightly job to run against Quarkus master so the issues are detected early.
+on:
+  release:
+    types: [published]
 
 jobs:
   test-push:
@@ -8,12 +9,5 @@ jobs:
     runs-on: ubuntu-18.04 
     steps:
     
-        
-        - name: Checkout Code with Ref '${GITHUB_REF}' 
-          uses: actions/checkout@v2
-            
-        - name: Set up JDK 11
-          run: |
-            chmod 777 .github/scripts/test.sh
-            ./.github/scripts/test.sh ${GITHUB_REF##*/}
-            ./.github/scripts/test.sh ${GITHUB_REF#refs/heads/}
+        - name: Print Message
+          run: echo "Hello"
