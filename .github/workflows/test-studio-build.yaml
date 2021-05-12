@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Checkout Code
         run: |
-          https://github.com/Apicurio/apicurio-data-models.git          
+          git clone https://github.com/Apicurio/apicurio-data-models.git          
           cd apicurio-data-models/
           git fetch origin pull/272/head:temp
           git checkout temp
