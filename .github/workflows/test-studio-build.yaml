@@ -23,6 +23,7 @@ jobs:
           java-version: 1.8
       - name: Print Info
         run: |
+          cd apicurio-data-models/
           echo "======================================================="
           echo "Java Home: $JAVA_HOME"
           mvn --version
