@@ -12,8 +12,8 @@ jobs:
         run: |
           git clone https://github.com/Apicurio/apicurio-data-models.git          
           cd apicurio-data-models/
-          git fetch origin pull/272/head:temp
-          git checkout temp
+          # git fetch origin pull/272/head:temp
+          # git checkout temp
           mvn -N io.takari:maven:wrapper -Dmaven=3.3.9
           ls -lrt
 
