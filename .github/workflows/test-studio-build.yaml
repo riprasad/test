@@ -35,5 +35,5 @@ jobs:
           echo "======================================================="
       - name: Build Project
         run: |
-          docker run -t --rm -v $(pwd)/apicurio-data-models/:/home/apicurio-data-models/ docker pull jimador/docker-jdk-8-maven-node bash -c 'cd /home/apicurio-data-models && mvn clean install -Ptranspilation'
+          docker run -t --rm -v $(pwd)/apicurio-data-models/:/home/apicurio-data-models/ jimador/docker-jdk-8-maven-node bash -c 'cd /home/apicurio-data-models && mvn clean install -Ptranspilation'
           
