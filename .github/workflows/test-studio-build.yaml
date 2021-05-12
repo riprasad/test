@@ -36,5 +36,5 @@ jobs:
         run: docker pull maven:3.6.3-openjdk-11 
       - name: Build Project
         run: |
-          docker run -it --rm -v $(pwd)/apicurio-data-models/:/home/apicurio-data-models/ maven:3.6.3-openjdk-11 bash -c 'mvn clean install -Ptranspilation'
+          docker run -t --rm -v $(pwd)/apicurio-data-models/:/home/apicurio-data-models/ maven:3.6.3-openjdk-11 bash -c 'mvn clean install -Ptranspilation'
           
