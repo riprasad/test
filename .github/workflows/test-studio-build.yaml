@@ -1,0 +1,38 @@
+
+name: test studio build
+on:
+  workflow_dispatch: {}
+
+jobs:
+  build-verify:
+    name: Verify Build
+    runs-on: ubuntu-18.04
+    if: github.repository_owner == 'Apicurio'
+    steps:
+      - name: Checkout Code
+        run: |
+          https://github.com/Apicurio/apicurio-data-models.git          
+          cd apicurio-data-models/
+          git fetch origin pull/272/head:temp
+          git checkout temp
+          mvn -N io.takari:maven:wrapper -Dmaven=3.6.3
+          ls -lrt
+
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Print Info
+        run: |
+          echo "======================================================="
+          echo "Java Home: $JAVA_HOME"
+          mvn --version
+          echo "======================================================="
+          echo "======================================================="
+          echo "Java Home: $JAVA_HOME"
+          ./mvnw --version
+          echo "======================================================="
+      - name: Build Project
+        run: |
+          cd apicurio-data-models/
+          ./mvnw clean install -Ptranspilation
