@@ -35,4 +35,4 @@ jobs:
       - name: Build Project
         run: |
           cd apicurio-data-models/
-          ./mvnw clean install -Ptranspilation
+          mvn clean install -Ptranspilation
