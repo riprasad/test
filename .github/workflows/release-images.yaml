@@ -57,6 +57,7 @@ jobs:
       - name: Build The Images For Quay.io
         run: |
          #cd registry && ./.github/scripts/build-images.sh master quay.io release ${RELEASE_VERSION}
+         cd registry
          docker build -f ./distro/docker/target/docker/Dockerfile.jvm -t quay.io/riprasad/apicurio-registry-mem:2.0.0.Final ./distro/docker/target/docker
          docker build -f ./distro/docker/target/docker/Dockerfile.sql.jvm -t quay.io/riprasad/apicurio-registry-sql:2.0.0.Final ./distro/docker/target/docker
          docker build -f ./distro/docker/target/docker/Dockerfile.kafkasql.jvm -t quay.io/riprasad/apicurio-registry-kafkasql:2.0.0.Final ./distro/docker/target/docker
