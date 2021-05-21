@@ -1,0 +1,27 @@
+name: Release Images
+on:
+  workflow_dispatch: {}
+  release:
+    types: [released]
+
+jobs:
+  test-push:
+    name: Test
+    runs-on: ubuntu-18.04 
+    steps:
+    
+      - name: Fetch Latest Release Details
+        run: touch latestRelease.json && curl https://api.github.com/repos/apicurio/apicurio-registry/releases/latest > latestRelease.json
+
+      - name: Retrieve Required Details
+        run: |
+          echo "RELEASE_NAME=$(cat latestRelease.json | jq '.name' | sed 's/"//g')" >> $GITHUB_ENV
+          echo "SOURCE_CODE_URL=$(cat latestRelease.json | jq '.zipball_url' | sed 's/"//g')" >> $GITHUB_ENV
+
+      - name: Download Source Code
+        run: wget -c $SOURCE_CODE_URL && unzip $RELEASE_NAME
+
+      - name: Build Project
+        run: |
+          cd apicurio-registry*
+          make SKIP_TESTS=true BUILD_FLAGS='-Dmaven.wagon.httpconnectionManager.maxTotal=30 -Dmaven.wagon.http.retryHandler.count=5' build-all
