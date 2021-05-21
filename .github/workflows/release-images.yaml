@@ -25,6 +25,7 @@ jobs:
 
       - name: Verify Project Version
         run: |
+          cd registry
           PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           if [[ $PROJECT_VERSION != $RELEASE_VERSION ]]
           then
