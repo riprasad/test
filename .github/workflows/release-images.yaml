@@ -1,4 +1,4 @@
-name: Release Image
+name: Release Images
 on:
   workflow_dispatch: {}
   release:
@@ -19,10 +19,12 @@ jobs:
           architecture: x64
 
       - name: Build Project
-        run: cd registry && make SKIP_TESTS=true BUILD_FLAGS='-Dmaven.wagon.httpconnectionManager.maxTotal=30 -Dmaven.wagon.http.retryHandler.count=5' build-all
+        run: cd registry && ./mvnw clean install -DskipTests=true
 
       - name: Build The Images For Docker.io
-        run: cd registry && ./.github/scripts/build-images.sh master docker.io release ${RELEASE_VERSION} 
+        run: |
+          cd registry
+          docker build -f ./distro/docker/target/docker/Dockerfile.jvm -t docker.io/riprasad/apicurio-registry-mem:latest ./distro/docker/target/docker 
 
       - name: List All Docker Images
         run: docker images
@@ -31,10 +33,14 @@ jobs:
         run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u "riprasad" --password-stdin
           
       - name: Push The Images To Docker.io 
-        run: cd registry && ./.github/scripts/push-images.sh master docker.io release ${RELEASE_VERSION}
+        run: |
+          cd registry
+          docker push docker.io/riprasad/apicurio-registry-mem:latest
         
       - name: Build The Images For Quay.io
-        run: cd registry && ./.github/scripts/build-images.sh master quay.io release ${RELEASE_VERSION}
+        run: |
+          cd registry
+          docker build -f ./distro/docker/target/docker/Dockerfile.jvm -t quay.io/riprasad/apicurio-registry-mem:latest ./distro/docker/target/docker 
 
       - name: List All Docker Images
         run: docker images
@@ -43,7 +49,9 @@ jobs:
         run: docker login -u "riprasad" -p "${{ secrets.QUAY_PASSWORD }}" Quay.io
           
       - name: Push The Images To Quay.io 
-        run: cd registry && ./.github/scripts/push-images.sh master quay.io release ${RELEASE_VERSION}
+        run: |
+          cd registry
+          docker push quay.io/riprasad/apicurio-registry-mem:latest
           
       - name: Push The Images To Quay.io 
         run: cd registry && ./.github/scripts/push-images.sh master quay.io release ${RELEASE_VERSION}
