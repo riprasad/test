@@ -9,7 +9,7 @@ jobs:
     #if: github.repository_owner == 'Apicurio' && github.event.inputs.branch == 'master'
     runs-on: ubuntu-18.04 
     steps:
-    
+
       - name: Fetch Latest Release Details
         run: touch latestRelease.json && curl https://api.github.com/repos/apicurio/apicurio-registry/releases/latest > latestRelease.json
 
@@ -41,27 +41,27 @@ jobs:
 
       - name: Build Project
         run: cd registry && make SKIP_TESTS=true BUILD_FLAGS='-Dmaven.wagon.httpconnectionManager.maxTotal=30 -Dmaven.wagon.http.retryHandler.count=5' build-all
-      
-      - name: Login to DockerHub Registry
-        run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
 
       - name: Build The Images For Docker.io
         run: cd registry && ./.github/scripts/build-images.sh master docker.io release ${RELEASE_VERSION} 
 
       - name: List All Docker Images
         run: docker images
+      
+      - name: Login to DockerHub Registry
+        run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
           
       - name: Push The Images To Docker.io 
         run: cd registry && ./.github/scripts/push-images.sh master docker.io release ${RELEASE_VERSION}
-          
-      - name: Login to Quay.io Registry
-        run: docker login -u "${{ secrets.QUAY_USERNAME }}" -p "${{ secrets.QUAY_PASSWORD }}" Quay.io
         
       - name: Build The Images For Quay.io
         run: cd registry && ./.github/scripts/build-images.sh master quay.io release ${RELEASE_VERSION} 
 
       - name: List All Docker Images
         run: docker images
+          
+      - name: Login to Quay.io Registry
+        run: docker login -u "${{ secrets.QUAY_USERNAME }}" -p "${{ secrets.QUAY_PASSWORD }}" Quay.io
           
       - name: Push The Images To Quay.io 
         run: cd registry && ./.github/scripts/push-images.sh master quay.io release ${RELEASE_VERSION}
