@@ -51,11 +51,21 @@ jobs:
       - name: Login to DockerHub Registry
         run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
           
-      - name: Push The Images To Docker.io 
-        run: cd registry && ./.github/scripts/push-images.sh master docker.io release ${RELEASE_VERSION}
+ # - name: Push The Images To Docker.io 
+ #       run: cd registry && ./.github/scripts/push-images.sh master docker.io release ${RELEASE_VERSION}
         
       - name: Build The Images For Quay.io
-        run: cd registry && ./.github/scripts/build-images.sh master quay.io release ${RELEASE_VERSION} 
+        run: |
+         #cd registry && ./.github/scripts/build-images.sh master quay.io release ${RELEASE_VERSION}
+         docker build -f ./distro/docker/target/docker/Dockerfile.jvm -t quay.io/riprasad/apicurio-registry-mem:2.0.0.Final ./distro/docker/target/docker
+         docker build -f ./distro/docker/target/docker/Dockerfile.sql.jvm -t quay.io/riprasad/apicurio-registry-sql:2.0.0.Final ./distro/docker/target/docker
+         docker build -f ./distro/docker/target/docker/Dockerfile.kafkasql.jvm -t quay.io/riprasad/apicurio-registry-kafkasql:2.0.0.Final ./distro/docker/target/docker
+         docker build -f multitenancy/tenant-manager-api/src/main/docker/Dockerfile.jvm -t quay.io/riprasad/apicurio-registry-tenant-manager-api:2.0.0.Final ./multitenancy/tenant-manager-api/
+         docker build -f ./distro/docker/target/docker/Dockerfile.jvm -t quay.io/riprasad/apicurio-registry-mem:latest-release ./distro/docker/target/docker
+         docker build -f ./distro/docker/target/docker/Dockerfile.sql.jvm -t quay.io/riprasad/apicurio-registry-sql:latest-release ./distro/docker/target/docker
+         docker build -f ./distro/docker/target/docker/Dockerfile.kafkasql.jvm -t quay.io/riprasad/apicurio-registry-kafkasql:latest-release ./distro/docker/target/docker
+         docker build -f multitenancy/tenant-manager-api/src/main/docker/Dockerfile.jvm -t quay.io/riprasad/apicurio-registry-tenant-manager-api:latest-release ./multitenancy/tenant-manager-api/
+
 
       - name: List All Docker Images
         run: docker images
@@ -64,7 +74,17 @@ jobs:
         run: docker login -u "${{ secrets.QUAY_USERNAME }}" -p "${{ secrets.QUAY_PASSWORD }}" Quay.io
           
       - name: Push The Images To Quay.io 
-        run: cd registry && ./.github/scripts/push-images.sh master quay.io release ${RELEASE_VERSION}
+        run: |
+         #cd registry && ./.github/scripts/push-images.sh master quay.io release ${RELEASE_VERSION}
+         docker push quay.io/riprasad/apicurio-registry-mem:2.0.0.Final
+         docker push quay.io/riprasad/apicurio-registry-sql:2.0.0.Final
+         docker push quay.io/riprasad/apicurio-registry-kafkasql:2.0.0.Final
+         docker push quay.io/riprasad/apicurio-registry-tenant-manager-api:2.0.0.Final
+         docker push quay.io/riprasad/apicurio-registry-mem:latest-release
+         docker push quay.io/riprasad/apicurio-registry-sql:latest-release
+         docker push quay.io/riprasad/apicurio-registry-kafkasql:latest-release
+         docker push quay.io/riprasad/apicurio-registry-tenant-manager-api:latest-release
+
 
 
   verify-release:
