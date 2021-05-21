@@ -5,8 +5,8 @@ on:
     types: [released]
 
 jobs:
-  test-push:
-    name: Test
+  release-images:
+    #if: github.repository_owner == 'Apicurio' && github.event.inputs.branch == 'master'
     runs-on: ubuntu-18.04 
     steps:
     
@@ -15,14 +15,74 @@ jobs:
 
       - name: Retrieve Required Details
         run: |
-          echo "RELEASE_NAME=$(cat latestRelease.json | jq '.name' | sed 's/"//g')" >> $GITHUB_ENV
+          echo "RELEASE_VERSION=$(cat latestRelease.json | jq '.name' | sed 's/"//g')" >> $GITHUB_ENV
           echo "SOURCE_CODE_URL=$(cat latestRelease.json | jq '.zipball_url' | sed 's/"//g')" >> $GITHUB_ENV
 
       - name: Download Source Code
-        run: wget -c $SOURCE_CODE_URL && unzip $RELEASE_NAME
+        run: wget -c $SOURCE_CODE_URL && unzip $RELEASE_VERSION && ls -lrt && mv Apicurio* registry
+
+      - name: Verify Project Version
+        run: |
+          PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          if [[ $PROJECT_VERSION != $RELEASE_VERSION ]]
+          then
+              echo "ERROR: Project Version '${PROJECT_VERSION}' does not match with Released Version '${RELEASE_VERSION}'"
+              exit 1	  
+          fi
+
+      - name: Set up JDK 11
+        uses: AdoptOpenJDK/install-jdk@v1
+        with:
+          version: '11'
+          architecture: x64
 
       - name: Build Project
-        run: |
-          ls -lrt
-          cd Apicurio*
-          make SKIP_TESTS=true BUILD_FLAGS='-Dmaven.wagon.httpconnectionManager.maxTotal=30 -Dmaven.wagon.http.retryHandler.count=5' build-all
+        run: cd registry && make SKIP_TESTS=true BUILD_FLAGS='-Dmaven.wagon.httpconnectionManager.maxTotal=30 -Dmaven.wagon.http.retryHandler.count=5' build-all
+      
+      - name: Login to DockerHub Registry
+        run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+
+      - name: Build The Images For Docker.io
+        run: cd registry && ./.github/scripts/build-images.sh master docker.io release ${RELEASE_VERSION} 
+
+      - name: List All Docker Images
+        run: docker images
+          
+      - name: Push The Images To Docker.io 
+        run: cd registry && ./.github/scripts/push-images.sh master docker.io release ${RELEASE_VERSION}
+          
+      - name: Login to Quay.io Registry
+        run: docker login -u "${{ secrets.QUAY_USERNAME }}" -p "${{ secrets.QUAY_PASSWORD }}" Quay.io
+        
+      - name: Build The Images For Quay.io
+        run: cd registry && ./.github/scripts/build-images.sh master quay.io release ${RELEASE_VERSION} 
+
+      - name: List All Docker Images
+        run: docker images
+          
+      - name: Push The Images To Quay.io 
+        run: cd registry && ./.github/scripts/push-images.sh master quay.io release ${RELEASE_VERSION}
+
+
+  verify-release:
+    runs-on: ubuntu-18.04
+    needs: ["release-images"]   # The Job gets triggered only after the "release-images" job has successfully completed. The job doesn't run in case the "release" job fails
+    #if: github.repository_owner == 'Apicurio' && github.event.inputs.branch == 'master'
+    steps:
+      - name: Set up JDK 11
+        uses: AdoptOpenJDK/install-jdk@v1
+        with:
+          version: '11'
+          architecture: x64
+
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Verify Docker Release For mem
+        run: ./.github/scripts/verify-docker-release.sh riprasad/apicurio-registry-mem:${RELEASE_VERSION} riprasad/apicurio-registry-mem:latest-release 
+     
+      - name: Verify Docker Release For sql
+        run: ./.github/scripts/verify-docker-release.sh riprasad/apicurio-registry-sql:${RELEASE_VERSION} riprasad/apicurio-registry-sql:latest-release 
+    
+      - name: Verify Docker Release For kafkasql
+        run: ./.github/scripts/verify-docker-release.sh riprasad/apicurio-registry-kafkasql:${RELEASE_VERSION} riprasad/apicurio-registry-kafkasql:latest-release 
