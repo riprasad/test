@@ -57,15 +57,11 @@ jobs:
       - name: Build The Images For Quay.io
         run: |
          #cd registry && ./.github/scripts/build-images.sh master quay.io release ${RELEASE_VERSION}
-         cd registry
-         docker build -f ./distro/docker/target/docker/Dockerfile.jvm -t quay.io/riprasad/apicurio-registry-mem:2.0.0.Final ./distro/docker/target/docker
-         docker build -f ./distro/docker/target/docker/Dockerfile.sql.jvm -t quay.io/riprasad/apicurio-registry-sql:2.0.0.Final ./distro/docker/target/docker
-         docker build -f ./distro/docker/target/docker/Dockerfile.kafkasql.jvm -t quay.io/riprasad/apicurio-registry-kafkasql:2.0.0.Final ./distro/docker/target/docker
-         docker build -f multitenancy/tenant-manager-api/src/main/docker/Dockerfile.jvm -t quay.io/riprasad/apicurio-registry-tenant-manager-api:2.0.0.Final ./multitenancy/tenant-manager-api/
-         docker build -f ./distro/docker/target/docker/Dockerfile.jvm -t quay.io/riprasad/apicurio-registry-mem:latest-release ./distro/docker/target/docker
-         docker build -f ./distro/docker/target/docker/Dockerfile.sql.jvm -t quay.io/riprasad/apicurio-registry-sql:latest-release ./distro/docker/target/docker
-         docker build -f ./distro/docker/target/docker/Dockerfile.kafkasql.jvm -t quay.io/riprasad/apicurio-registry-kafkasql:latest-release ./distro/docker/target/docker
-         docker build -f multitenancy/tenant-manager-api/src/main/docker/Dockerfile.jvm -t quay.io/riprasad/apicurio-registry-tenant-manager-api:latest-release ./multitenancy/tenant-manager-api/
+         cd Registry
+         docker image tag  docker.io/riprasad/apicurio-registry-mem:2.0.0.Final riprasad/apicurio-registry-mem:2.0.0.Final riprasad/apicurio-registry-mem:latest-release
+         docker image tag  docker.io/riprasad/apicurio-registry-sql:2.0.0.Final quay.io/riprasad/apicurio-registry-sql:2.0.0.Final quay.io/riprasad/apicurio-registry-sql:latest-release
+         docker image tag  docker.io/riprasad/apicurio-registry-kafkasql:2.0.0.Final quay.io/riprasad/apicurio-registry-kafkasql:2.0.0.Final quay.io/riprasad/apicurio-registry-kafkasql:latest-release
+         docker image tag  docker.io/riprasad/apicurio-registry-tenant-manager-api:2.0.0.Final quay.io/riprasad/apicurio-registry-tenant-manager-api:2.0.0.Final quay.io/riprasad/apicurio-registry-tenant-manager-api:latest-release
 
 
       - name: List All Docker Images
