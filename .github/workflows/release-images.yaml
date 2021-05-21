@@ -19,7 +19,9 @@ jobs:
           echo "SOURCE_CODE_URL=$(cat latestRelease.json | jq '.zipball_url' | sed 's/"//g')" >> $GITHUB_ENV
 
       - name: Download Source Code
-        run: wget -c $SOURCE_CODE_URL && unzip $RELEASE_VERSION && ls -lrt && mv Apicurio* registry
+        run: |
+         #wget -c $SOURCE_CODE_URL && unzip $RELEASE_VERSION && ls -lrt && mv Apicurio* registry
+         git clone https://github.com/riprasad/registry-test.git registry
 
       - name: Verify Project Version
         run: |
