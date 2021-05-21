@@ -44,3 +44,6 @@ jobs:
           
       - name: Push The Images To Quay.io 
         run: cd registry && ./.github/scripts/push-images.sh master quay.io release ${RELEASE_VERSION}
+          
+      - name: Push The Images To Quay.io 
+        run: cd registry && ./.github/scripts/push-images.sh master quay.io release ${RELEASE_VERSION}
