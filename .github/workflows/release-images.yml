@@ -52,6 +52,3 @@ jobs:
         run: |
           cd registry
           docker push quay.io/riprasad/apicurio-registry-mem:latest
-          
-      - name: Push The Images To Quay.io 
-        run: cd registry && ./.github/scripts/push-images.sh master quay.io release ${RELEASE_VERSION}
