@@ -1,0 +1,45 @@
+name: Test Job
+on:
+  workflow_dispatch: {}
+
+jobs:
+  Job1:
+    runs-on: ubuntu-18.04 
+    steps:
+
+       - name: Fetch Latest Release Details
+        run: touch latestRelease.json && curl https://api.github.com/repos/apicurio/apicurio-registry/releases/latest > latestRelease.json
+
+      - name: Retrieve Required Details
+        run: |
+          echo "RELEASE_VERSION=$(cat latestRelease.json | jq '.name' | sed 's/"//g')" >> $GITHUB_ENV
+          echo "SOURCE_CODE_URL=$(cat latestRelease.json | jq '.zipball_url' | sed 's/"//g')" >> $GITHUB_ENV
+
+      - name: Download Source Code
+        run: wget -c $SOURCE_CODE_URL && unzip $RELEASE_VERSION && ls -lrt && mv Apicurio* registry
+
+      - name: Verify Project Version
+        run: |
+          cd registry
+          PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+          if [[ $PROJECT_VERSION != $RELEASE_VERSION ]]
+          then
+              echo "ERROR: Project Version '${PROJECT_VERSION}' does not match with Released Version '${RELEASE_VERSION}'"
+              exit 1	  
+          fi
+          
+       - name: view files
+         run: ls -lrt
+        
+ Job2:
+    runs-on: ubuntu-18.04
+    needs: ["Job1"] 
+    steps:
+
+      - name: view files
+        run: ls -lrt
+         
+      - name: print env variable
+         run: |
+           echo ${RELEASE_VERSION}
+           echo ${SOURCE_CODE_URL}
