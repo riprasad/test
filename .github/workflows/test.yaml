@@ -41,6 +41,6 @@ jobs:
         run: ls -lrt
          
       - name: print env variable
-         run: |
+        run: |
            echo ${RELEASE_VERSION}
            echo ${SOURCE_CODE_URL}
