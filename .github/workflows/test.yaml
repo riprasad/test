@@ -14,7 +14,6 @@ jobs:
         run: |
           echo "RELEASE_VERSION=$(cat latestRelease.json | jq '.name' | sed 's/"//g')" >> $GITHUB_ENV
           echo "SOURCE_CODE_URL=$(cat latestRelease.json | jq '.zipball_url' | sed 's/"//g')" >> $GITHUB_ENV
-
       - name: Download Source Code
         run: wget -c $SOURCE_CODE_URL && unzip $RELEASE_VERSION && ls -lrt && mv Apicurio* registry
 
@@ -31,7 +30,7 @@ jobs:
        - name: view files
          run: ls -lrt
         
- Job2:
+  Job2:
     runs-on: ubuntu-18.04
     needs: ["Job1"] 
     steps:
