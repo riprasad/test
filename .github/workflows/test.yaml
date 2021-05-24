@@ -3,7 +3,7 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  Job1:
+  joba:
     runs-on: ubuntu-18.04 
     steps:
 
@@ -14,6 +14,7 @@ jobs:
         run: |
           echo "RELEASE_VERSION=$(cat latestRelease.json | jq '.name' | sed 's/"//g')" >> $GITHUB_ENV
           echo "SOURCE_CODE_URL=$(cat latestRelease.json | jq '.zipball_url' | sed 's/"//g')" >> $GITHUB_ENV
+
       - name: Download Source Code
         run: wget -c $SOURCE_CODE_URL && unzip $RELEASE_VERSION && ls -lrt && mv Apicurio* registry
 
@@ -26,13 +27,14 @@ jobs:
               echo "ERROR: Project Version '${PROJECT_VERSION}' does not match with Released Version '${RELEASE_VERSION}'"
               exit 1	  
           fi
-          
-       - name: view files
-         run: ls -lrt
-        
-  Job2:
+
+      - name: view files
+        run: ls -lrt
+
+
+  jobb:
     runs-on: ubuntu-18.04
-    needs: ["Job1"] 
+    needs: ["joba"]
     steps:
 
       - name: view files
