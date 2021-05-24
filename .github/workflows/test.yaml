@@ -2,35 +2,30 @@ name: Test Job
 on:
   workflow_dispatch: {}
 
+
 jobs:
-  joba:
-    runs-on: ubuntu-18.04 
+  build:
+    name: Build Project
+    runs-on: ubuntu-18.04    
     steps:
+            
+        - name: Set up JDK 11
+          uses: AdoptOpenJDK/install-jdk@v1
+          with:
+            version: '11'
+            architecture: x64
 
-      - name: Fetch Latest Release Details
-        run: touch latestRelease.json && curl https://api.github.com/repos/apicurio/apicurio-registry/releases/latest > latestRelease.json
+        - name: Fetch Quarkus Latest Release version
+          run: echo "QUARKUS_LATEST_RELEASE=$(curl https://api.github.com/repos/quarkusio/quarkus/releases/latest | jq '.name' | sed 's/"//g')" >> $GITHUB_ENV
+        
+        - name: Checkout Code
+          run: git clone https://github.com/Apicurio/apicurio-registry.git
+            
+        - name: Build Registry
+          run: cd apicurio-registry && make SKIP_TESTS=false BUILD_FLAGS='-Dquarkus.version=${QUARKUS_LATEST_RELEASE}' build-all
 
-      - name: Retrieve Required Details
-        run: |
-          echo "RELEASE_VERSION=$(cat latestRelease.json | jq '.name' | sed 's/"//g')" >> $GITHUB_ENV
-          echo "SOURCE_CODE_URL=$(cat latestRelease.json | jq '.zipball_url' | sed 's/"//g')" >> $GITHUB_ENV
+        - name: Set test profile to all
+          run: echo "test_profile=all" >> $GITHUB_ENV
 
-      - name: Download Source Code
-        run: wget -c $SOURCE_CODE_URL && unzip $RELEASE_VERSION && ls -lrt && mv Apicurio* registry
-
-      - name: view files
-        run: ls -lrt
-
-
-  jobb:
-    runs-on: ubuntu-18.04
-    needs: ["joba"]
-    steps:
-
-      - name: view files
-        run: ls -lrt
-         
-      - name: print env variable
-        run: |
-           echo ${{env.RELEASE_VERSION}}
-           echo ${{env.SOURCE_CODE_URL}}
+        - name: Build integration-tests-common
+          run: cd apicurio-registry && ./mvnw install -Pintegration-tests -pl integration-tests/integration-tests-common -Dquarkus.version=${QUARKUS_LATEST_RELEASE}
