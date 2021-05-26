@@ -9,23 +9,10 @@ jobs:
     runs-on: ubuntu-18.04    
     steps:
             
-        - name: Set up JDK 11
-          uses: AdoptOpenJDK/install-jdk@v1
-          with:
-            version: '11'
-            architecture: x64
-
-        - name: Fetch Quarkus Latest Release version
-          run: echo "QUARKUS_LATEST_RELEASE=$(curl https://api.github.com/repos/quarkusio/quarkus/releases | jq '.[0].name' | sed 's/"//g')" >> $GITHUB_ENV
-        
-        - name: Checkout Code
-          run: git clone https://github.com/Apicurio/apicurio-registry.git
-            
-        - name: Build Registry
-          run: cd apicurio-registry && make SKIP_TESTS=false BUILD_FLAGS='-Dquarkus.version=${QUARKUS_LATEST_RELEASE}' build-all
-
-        - name: Set test profile to all
-          run: echo "test_profile=all" >> $GITHUB_ENV
-
-        - name: Build integration-tests-common
-          run: cd apicurio-registry && ./mvnw install -Pintegration-tests -pl integration-tests/integration-tests-common -Dquarkus.version=${QUARKUS_LATEST_RELEASE}
+        - name: rename test
+          run: |
+            mkdir riprasad-test
+            ls -lrt
+            mv ${{github.repository_owner}}* rename
+            ls -lrt
+          
