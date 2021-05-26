@@ -10,4 +10,4 @@ jobs:
     steps:
     
         - name: Print Github Event Context
-          run: echo ${{ github.event }}
+          run: echo ${{ toJson(github) }}
