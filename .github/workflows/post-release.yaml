@@ -43,7 +43,7 @@ jobs:
     
       - name: Determine Floating Tag
         run: |
-          if [[ $BRANCH == 'master']]
+          if [[ $BRANCH == 'master' ]]
           then
               echo "FLOATING_TAG=latest-release" >> $GITHUB_ENV
           else
