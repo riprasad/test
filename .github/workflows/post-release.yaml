@@ -2,10 +2,13 @@ name: Post-Release
 on:
   release:
     types: [released]
+env:
+  RELEASE_VERSION: ${{ github.event.release.name }}
+  SOURCE_CODE_URL: ${{ github.event.release.zipball_url }}
+  BRANCH: ${{ github.event.release.target_commitish }}
 
 jobs:
-  test-push:
-    name: Test
+  Dump-Context:
     runs-on: ubuntu-18.04 
     steps:
     
@@ -33,3 +36,23 @@ jobs:
         env:
           MATRIX_CONTEXT: ${{ toJSON(matrix) }}
         run: echo "$MATRIX_CONTEXT"
+        
+  Test:
+    runs-on: ubuntu-18.04 
+    steps:
+    
+      - name: Determine Floating Tag
+        run: |
+          if [[ $BRANCH == 'master']]
+          then
+              echo "FLOATING_TAG=latest-release" >> $GITHUB_ENV
+          else
+              echo "FLOATING_TAG=$BRANCH-release" >> $GITHUB_ENV
+          fi
+          
+      - name: Print Environment Variables
+        run: |
+          echo $${{env.RELEASE_VERSION}}
+          echo $${{env.SOURCE_CODE_URL}}
+          echo $${{env.BRANCH}}
+          echo $${{env.FLOATING_TAG}}
