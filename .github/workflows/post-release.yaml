@@ -9,5 +9,5 @@ jobs:
     runs-on: ubuntu-18.04 
     steps:
     
-        - name: Print Message
-          run: echo "${{ github.event }}"
+        - name: Print Github Event Context
+          run: echo ${{ github.event }}
