@@ -9,8 +9,8 @@ jobs:
     runs-on: ubuntu-18.04    
     steps:
             
-        - name: Fetch Apicurio Latest Release Metadata File
-          run: echo "LATEST_RELEASE=$(curl https://api.github.com/repos/apicurio/apicurio-registry/releases/latest)" >> $GITHUB_ENV
+       # - name: Fetch Apicurio Latest Release Metadata File
+       #   run: echo "LATEST_RELEASE=$(curl https://api.github.com/repos/apicurio/apicurio-registry/releases/latest)" >> $GITHUB_ENV
           
         - name: Fetch Required Details from the Metadata File
           run: |
