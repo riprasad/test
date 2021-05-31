@@ -9,12 +9,15 @@ jobs:
     runs-on: ubuntu-18.04    
     steps:
             
-       # - name: Fetch Apicurio Latest Release Metadata File
-       #   run: echo "LATEST_RELEASE=$(curl https://api.github.com/repos/apicurio/apicurio-registry/releases/latest)" >> $GITHUB_ENV
-          
-        - name: Fetch Required Details from the Metadata File
-          run: |
-            echo "VERSION=$(curl https://api.github.com/repos/apicurio/apicurio-registry/releases/latest | jq '.tag_name' | sed 's/"//g')" >> $GITHUB_ENV
+    - name: Fetch required Details
+      run: |
+          touch latestRelease.json && curl https://api.github.com/repos/apicurio/apicurio-registry/releases/latest > latestRelease.json
+          echo "RELEASE_VERSION=$(cat latestRelease.json | jq '.name' | sed 's/"//g')" >> $GITHUB_ENV
+          echo "SOURCE_CODE_URL=$(cat latestRelease.json | jq '.zipball_url' | sed 's/"//g')" >> $GITHUB_ENV
+          echo "BRANCH=$(cat latestRelease.json | jq '.target_commitish' | sed 's/"//g')" >> $GITHUB_ENV
         
-        - name: Test ${{ env.VERSION }}
-          run: echo "${VERSION}"
+    - name: Test ${{ env.RELEASE_VERSION }}
+      run: |
+        echo "${RELEASE_VERSION}"
+        echo "${SOURCE_CODE_URL}"
+        echo "${BRANCH}"
