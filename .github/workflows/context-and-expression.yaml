@@ -14,7 +14,7 @@ jobs:
           echo "myIntegerNumber: ${{ 711 }}"
           echo "myFloatNumber: ${{ -9.2 }}"
           echo "myHexNumber: ${{ 0xff }}"
-          echo "myExponentialNumber: ${{ -2.99-e2 }}"
+          #echo "myExponentialNumber: ${{ -2.99-e2 }}"
           echo "myString: ${{ 'Mona the Octocat' }}"
           echo "myEscapedString: ${{ 'It''s open source!' }}"
 
