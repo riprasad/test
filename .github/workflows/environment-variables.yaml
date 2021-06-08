@@ -1,4 +1,7 @@
-on: workflow_dispatch 
+name: environment-variables-example
+
+on: workflow_dispatch
+
 env: 
   WORKFLOW_ENV: Available to all jobs 
 
@@ -8,8 +11,7 @@ jobs:
     env:
       JOB_ENV: Available to all steps in log-env jobs
       
-    steps:
-    
+    steps:    
       - name: Set Environment variable
         run: echo "QUARKUS_LATEST_RELEASE=$(curl https://api.github.com/repos/quarkusio/quarkus/releases | jq '.[0].name' | sed 's/"//g')" >> $GITHUB_ENV
       
