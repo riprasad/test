@@ -11,7 +11,7 @@ jobs:
         # including and excluding matrix configuration
         include: 
           - os: ubuntu-latest
-            node_version: 8
+            node_version: 12
         exclude:
           - os: ubuntu-latest
             node_version: 6
