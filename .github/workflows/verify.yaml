@@ -1,22 +1,23 @@
- 
+ # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#onpushpull_requestbranchestags
+ # 
 name: Verify Build Workflow
 on:
   push:
-    paths-ignore:
-      - '.github/**'
-      - '.gitignore'
-      - 'LICENSE'
-      - 'README*'
-      - 'docs/**'
     branches: [master, '[1-9].[0-9].x']
+    paths-ignore:
+      - '.github/**' # https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#filter-pattern-cheat-sheet
+      - '.gitignore'
+      - 'LICENSE'
+      - 'README*'
+      - 'docs/**'
   pull_request:
+    branches: [master]
     paths-ignore:
       - '.github/**'
       - '.gitignore'
       - 'LICENSE'
       - 'README*'
       - 'docs/**'
-    branches: [master]
 
 jobs:
   build-verify:
