@@ -51,7 +51,6 @@ jobs:
               - 6379/tcp
       steps:
           - name: verify nginx service
-            # docker containers communicate with each other through their service name. thus, localhost won't work
             run: curl http://localhost:8080 
         
        
