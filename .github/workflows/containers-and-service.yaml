@@ -31,7 +31,7 @@ jobs:
         # syntax: docker://<image-name>
         uses: docker://node:12.14.1-alpine3.10
         with:
-            entrypoint: usr/local/bin/node
+            entrypoint: /usr/local/bin/node
             args: -v
 
 
@@ -52,6 +52,6 @@ jobs:
       steps:
           - name: verify nginx service
             # docker containers communicate with each other through their service name. thus, localhost won't work
-            run: curl http://nginx:8080 
+            run: curl http://localhost:8080 
         
        
