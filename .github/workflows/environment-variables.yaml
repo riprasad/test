@@ -1,3 +1,4 @@
+# https://docs.github.com/en/actions/reference/environment-variables
 name: environment-variables-example
 
 on: workflow_dispatch
@@ -5,13 +6,15 @@ on: workflow_dispatch
 env: 
   WF_ENV: Available to all jobs 
 
-jobs: 
+jobs:
+
   log-env:
     runs-on: ubuntu-latest
     env:
       JOB_ENV: Available to all steps in log-env jobs
       
-    steps:    
+    steps:
+      # https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable
       - name: Set Environment variable
         run: echo "QUARKUS_LATEST_RELEASE=$(curl https://api.github.com/repos/quarkusio/quarkus/releases | jq '.[0].name' | sed 's/"//g')" >> $GITHUB_ENV
       
@@ -27,6 +30,7 @@ jobs:
   log-default-env: 
     runs-on: ubuntu-latest
     steps:
+      # https://docs.github.com/en/actions/reference/environment-variables#default-environment-variables
       - name: Log Default ENV Variables 
         run: |
           echo "HOME: ${HOME}"
