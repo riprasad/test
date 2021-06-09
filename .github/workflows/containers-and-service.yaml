@@ -20,8 +20,8 @@ jobs:
         #ports:
         #    - 8080:80
         #env:
-        #    - key1: value1
-        #options:
+        #   key1: value1
+        #options: --storage-opt size=120G --cpu 1
         
     steps:
       - name: Log node version  
