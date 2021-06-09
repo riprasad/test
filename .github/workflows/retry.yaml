@@ -7,11 +7,11 @@ on: workflow_dispatch
 jobs:
   retry:
     runs-on: ubuntu-latest
-    timeout: 10                               # The maximum number of minutes to let a job run before GitHub automatically cancels it. Default: 360
+    timeout-minutes: 10                       # The maximum number of minutes to let a job run before GitHub automatically cancels it. Default: 360
     steps:
     
       - name: test
-        timeout: 15                           # The maximum number of minutes to run the step before killing the process.
+        timeout-minutes: 15                   # The maximum number of minutes to run the step before killing the process.
         continue-on-error: true               # make the step always success
         id: test
         run: exit 1                           # let's say 1st failed. for you, here could be mvn deploy command.
