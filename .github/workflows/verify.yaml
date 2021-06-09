@@ -22,7 +22,7 @@ jobs:
   build-verify:
     name: Verify Build
     runs-on: ubuntu-18.04
-    if: github.repository_owner == 'rishab-prasad'
+    if: github.repository_owner == 'riprasad'
     steps:
       - name: Checkout Code with Ref '${{ github.ref }}'
         uses: actions/checkout@v2
