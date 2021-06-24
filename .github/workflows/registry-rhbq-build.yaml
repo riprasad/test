@@ -37,21 +37,21 @@ jobs:
             architecture: x64
             
         - name: Set up settings.xml
-        run: |
-          pwd
-          mkdir -p /home/runner/.m2
-          chmod 755 /home/runner/.m2
-          echo "<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd"><localRepository>${user.home}/.m2-mead-pnc</localRepository><profiles><profile><id>public-repositories</id><repositories><repository><id>central</id><name>Maven Central</name><url>https://repo1.maven.org/maven2</url><releases><enabled>true</enabled></releases><snapshots><enabled>false</enabled></snapshots></repository></repositories><pluginRepositories><pluginRepository><id>central</id><name>Maven Central</name><url>https://repo1.maven.org/maven2</url><releases><enabled>true</enabled></releases><snapshots><enabled>false</enabled></snapshots></pluginRepository></pluginRepositories></profile><profile><id>redhat-repository</id><repositories><repository><id>redhat-repository</id><name>Red Hat repository</name><url>http://maven.repository.redhat.com/ga/</url><layout>default</layout><releases><enabled>true</enabled><updatePolicy>never</updatePolicy></releases><snapshots><enabled>false</enabled><updatePolicy>never</updatePolicy></snapshots></repository></repositories><pluginRepositories><pluginRepository><id>redhat-repository</id><name>Red Hat repository</name><url>http://maven.repository.redhat.com/ga/</url><layout>default</layout><releases><enabled>true</enabled><updatePolicy>never</updatePolicy></releases><snapshots><enabled>false</enabled><updatePolicy>never</updatePolicy></snapshots></pluginRepository></pluginRepositories></profile></profiles><activeProfiles><activeProfile>public-repositories</activeProfile><activeProfile>redhat-repository</activeProfile></activeProfiles></settings>" > /home/runner/.m2/settings.xml
-          cat /home/runner/.m2/settings.xml        
+          run: |
+           pwd
+           mkdir -p /home/runner/.m2
+           chmod 755 /home/runner/.m2
+           echo "<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 https://maven.apache.org/xsd/settings-1.0.0.xsd"><localRepository>${user.home}/.m2-mead-pnc</localRepository><profiles><profile><id>public-repositories</id><repositories><repository><id>central</id><name>Maven Central</name><url>https://repo1.maven.org/maven2</url><releases><enabled>true</enabled></releases><snapshots><enabled>false</enabled></snapshots></repository></repositories><pluginRepositories><pluginRepository><id>central</id><name>Maven Central</name><url>https://repo1.maven.org/maven2</url><releases><enabled>true</enabled></releases><snapshots><enabled>false</enabled></snapshots></pluginRepository></pluginRepositories></profile><profile><id>redhat-repository</id><repositories><repository><id>redhat-repository</id><name>Red Hat repository</name><url>http://maven.repository.redhat.com/ga/</url><layout>default</layout><releases><enabled>true</enabled><updatePolicy>never</updatePolicy></releases><snapshots><enabled>false</enabled><updatePolicy>never</updatePolicy></snapshots></repository></repositories><pluginRepositories><pluginRepository><id>redhat-repository</id><name>Red Hat repository</name><url>http://maven.repository.redhat.com/ga/</url><layout>default</layout><releases><enabled>true</enabled><updatePolicy>never</updatePolicy></releases><snapshots><enabled>false</enabled><updatePolicy>never</updatePolicy></snapshots></pluginRepository></pluginRepositories></profile></profiles><activeProfiles><activeProfile>public-repositories</activeProfile><activeProfile>redhat-repository</activeProfile></activeProfiles></settings>" > /home/runner/.m2/settings.xml
+           cat /home/runner/.m2/settings.xml        
         
         - name: Apicurio Registry Checkout
-        run: |
-          git init
-          git remote add origin "https://github.com/Apicurio/apicurio-registry.git"
-          git fetch
-          git checkout ${{ github.event.inputs.branch }}
-          git branch --set-upstream-to=origin/${{ github.event.inputs.branch }}
-          git pull
+          run: |
+           git init
+           git remote add origin "https://github.com/Apicurio/apicurio-registry.git"
+           git fetch
+           git checkout ${{ github.event.inputs.branch }}
+           git branch --set-upstream-to=origin/${{ github.event.inputs.branch }}
+           git pull
 
         - name: Download PME 
           run: mvn dependency:get -Dartifact=org.commonjava.maven.ext:pom-manipulation-cli:LATEST:jar -Ddest=pom-manipulation-cli.jar
