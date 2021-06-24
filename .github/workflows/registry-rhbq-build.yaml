@@ -62,7 +62,7 @@ jobs:
            ls -lrt /home/runner/.m2/
            
         - name: Run PME
-          run: java -jar /home/runner/.m2/pom-manipulation-cli.jar -DgroovyScripts=${{ github.event.inputs.script-url }}
+          run: cd registry && java -jar /home/runner/.m2/pom-manipulation-cli.jar -DgroovyScripts=${{ github.event.inputs.script-url }}
             
         - name: Build Registry
           run: pwd && cd registry && ./mvnw clean install -P${{ github.event.inputs.maven-profiles }} -DskipTests=${{ github.event.inputs.skip-tests }} ${{ github.event.inputs.extra-params }}
