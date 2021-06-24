@@ -1,4 +1,4 @@
-name: Bi-Weekly Quarkus Build # Bi-weekly job to run against Quarkus latest release so the issues are detected early.
+name: Registry RHBQ Build # job to build apicurio registry using Red Hat Build of Quarkus so the issues are detected earlier
 on:
   workflow_dispatch:
     inputs:
