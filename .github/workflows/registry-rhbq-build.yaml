@@ -54,10 +54,10 @@ jobs:
            git pull
 
         - name: Download PME 
-          run: mvn dependency:get -Dartifact=org.commonjava.maven.ext:pom-manipulation-cli:LATEST:jar -Ddest=pom-manipulation-cli.jar
+          run: mvn dependency:get -Dartifact=org.commonjava.maven.ext:pom-manipulation-cli:LATEST:jar -Ddest=/home/runner/.m2/pom-manipulation-cli.jar
           
         - name: Run PME
-          run: java -jar $(pwd)/pom-manipulation-cli.jar -DgroovyScripts=${{ github.event.inputs.script-url }}
+          run: java -jar /home/runner/.m2/pom-manipulation-cli.jar -DgroovyScripts=${{ github.event.inputs.script-url }}
             
         - name: Build Registry
           run: ./mvnw clean install -P${{ github.event.inputs.maven-profiles }} -DskipTests=${{ github.event.inputs.skip-tests }} ${{ github.event.inputs.extra-params }}
