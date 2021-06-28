@@ -1,0 +1,72 @@
+<settings>
+	<profiles>
+		<profile>
+			<id>public-repositories</id>
+			<repositories>
+				<repository>
+					<id>central</id>
+					<name>Maven Central</name>
+					<url>https://repo1.maven.org/maven2</url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</repository>
+			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>central</id>
+					<name>Maven Central</name>
+					<url>https://repo1.maven.org/maven2</url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</pluginRepository>
+			</pluginRepositories>
+		</profile>
+		<profile>
+			<id>redhat-repository</id>
+			<repositories>
+				<repository>
+					<id>redhat-repository</id>
+					<name>Red Hat repository</name>
+					<url>http://maven.repository.redhat.com/ga/</url>
+					<layout>default</layout>
+					<releases>
+						<enabled>true</enabled>
+						<updatePolicy>never</updatePolicy>
+					</releases>
+					<snapshots>
+						<enabled>false</enabled>
+						<updatePolicy>never</updatePolicy>
+					</snapshots>
+				</repository>
+			</repositories>
+			<pluginRepositories>
+				<pluginRepository>
+					<id>redhat-repository</id>
+					<name>Red Hat repository</name>
+					<url>http://maven.repository.redhat.com/ga/</url>
+					<layout>default</layout>
+					<releases>
+						<enabled>true</enabled>
+						<updatePolicy>never</updatePolicy>
+					</releases>
+					<snapshots>
+						<enabled>false</enabled>
+						<updatePolicy>never</updatePolicy>
+					</snapshots>
+				</pluginRepository>
+			</pluginRepositories>
+		</profile>
+	</profiles>
+	<activeProfiles>
+		<activeProfile>public-repositories</activeProfile>
+		<activeProfile>redhat-repository</activeProfile>
+	</activeProfiles>
+</settings>
