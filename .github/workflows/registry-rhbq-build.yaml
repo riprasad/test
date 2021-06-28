@@ -36,7 +36,7 @@ jobs:
             version: '11'
             architecture: x64
             
-        - name: Set up settings.xml
+        - name: Set up settings.xml to use Red Hat repositories
           run: |
            pwd
            mkdir -p /home/runner/.m2
@@ -46,8 +46,6 @@ jobs:
         
         - name: Apicurio Registry Checkout
           run: |
-           mkdir registry
-           cd registry
            git init
            git remote add origin "https://github.com/Apicurio/apicurio-registry.git"
            git fetch
@@ -56,31 +54,32 @@ jobs:
            git pull
 
         - name: Download PME 
-          run: |           
-           pwd           
-           mvn dependency:get -Dartifact=org.commonjava.maven.ext:pom-manipulation-cli:LATEST:jar -Ddest=/home/runner/.m2/pom-manipulation-cli.jar
-           ls -lrt /home/runner/.m2/
+          run: mvn dependency:get -Dartifact=org.commonjava.maven.ext:pom-manipulation-cli:LATEST:jar -Ddest=/home/runner/.m2/pom-manipulation-cli.jar
            
         - name: Run PME
-          run: cd registry && java -jar /home/runner/.m2/pom-manipulation-cli.jar -DgroovyScripts=${{ github.event.inputs.script-url }}
+          run: java -jar /home/runner/.m2/pom-manipulation-cli.jar -DgroovyScripts=${{ github.event.inputs.script-url }}
             
         - name: Build Registry
-          run: pwd && cd registry && ./mvnw clean install -P${{ github.event.inputs.maven-profiles }} -DskipTests=${{ github.event.inputs.skip-tests }} ${{ github.event.inputs.extra-params }}
+          run: ./mvnw clean install -P${{ github.event.inputs.maven-profiles }} -DskipTests=${{ github.event.inputs.skip-tests }} ${{ github.event.inputs.extra-params }}
 
         - name: Set test profile to all
           run: echo "test_profile=all" >> $GITHUB_ENV
 
         - name: Build integration-tests-common
-          run: cd registry && ./mvnw install -Pintegration-tests -pl integration-tests/integration-tests-common
+          if: ${{ github.event.inputs.skip-tests }}
+          run: ./mvnw install -Pintegration-tests -pl integration-tests/integration-tests-common
 
         - name: Run Integration Tests - sql
-          run: cd registry && ./mvnw verify -Pintegration-tests -P${{ env.test_profile }} -Psql -pl integration-tests/testsuite -Dmaven.javadoc.skip=true --no-transfer-progress
+          if: ${{ github.event.inputs.skip-tests }}
+          run: ./mvnw verify -Pintegration-tests -P${{ env.test_profile }} -Psql -pl integration-tests/testsuite -Dmaven.javadoc.skip=true --no-transfer-progress
 
         - name: Run Integration Tests - kafkasql
-          run: cd registry && ./mvnw verify -Pintegration-tests -P${{ env.test_profile }} -Pkafkasql -pl integration-tests/testsuite -Dmaven.javadoc.skip=true --no-transfer-progress
+          if: ${{ github.event.inputs.skip-tests }}
+          run: ./mvnw verify -Pintegration-tests -P${{ env.test_profile }} -Pkafkasql -pl integration-tests/testsuite -Dmaven.javadoc.skip=true --no-transfer-progress
 
         - name: Run Legacy Tests - sql
-          run: cd registry && ./mvnw verify -Pintegration-tests -P${{ env.test_profile }} -Psql -pl integration-tests/legacy-tests -Dmaven.javadoc.skip=true --no-transfer-progress
+          if: ${{ github.event.inputs.skip-tests }}
+          run: ./mvnw verify -Pintegration-tests -P${{ env.test_profile }} -Psql -pl integration-tests/legacy-tests -Dmaven.javadoc.skip=true --no-transfer-progress
 
         - name: Collect logs
           if: failure()
