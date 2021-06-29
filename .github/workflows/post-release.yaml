@@ -20,7 +20,9 @@ jobs:
   Test:
     runs-on: ubuntu-18.04 
     steps:
-    
+      - name: ${{ github.ref }}
+        run: echo "${{ github.ref }}"
+        
       - name: Determine Floating Tag
         run: |
           if [[ $BRANCH == 'master' ]]
