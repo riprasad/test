@@ -16,7 +16,7 @@ cat <<EOF
   "name": "$RELEASE_VERSION",
   "body": "",
   "draft": false,
-  "prerelease": "$PRE_RELEASE"
+  "prerelease": $PRE_RELEASE
 }
 EOF
 }
