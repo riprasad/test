@@ -9,6 +9,10 @@ on:
         description: 'Branch to release from'
         required: true
         default: 'master'
+      pre-release:
+        description: 'Is it a pre-release?'
+        required: true
+        default: 'false'
 
 jobs:
     test:
@@ -21,12 +25,12 @@ jobs:
             - name: Create GitHub Release
               run: |
                 ls -lrt
-                ./.github/scripts/create-github-release.sh ${{ github.event.inputs.release-version}} ${{ github.event.inputs.branch}} $GITHUB_REPOSITORY ${{ secrets.ACCESS_TOKEN }}
+                ./.github/scripts/create-github-release.sh ${{ github.event.inputs.release-version}} ${{ github.event.inputs.branch}} $GITHUB_REPOSITORY ${{ secrets.ACCESS_TOKEN }} ${{ github.event.inputs.pre-release }}
             
-            - name: Install Gren
-              run: npm install github-release-notes -g && gren release --token=${{ secrets.GITHUB_TOKEN }} --override  
-              
-            - name: Generate Release Notes
-              run: gren release --token=${{ secrets.GITHUB_TOKEN }} --override --debug --data-source=milestones --milestone-match="Release ${{ github.event.inputs.release-version }}"
+            #- name: Install Gren
+            #  run: npm install github-release-notes -g && gren release --token=${{ secrets.GITHUB_TOKEN }} --override  
+            #  
+            #- name: Generate Release Notes
+            #  run: gren release --token=${{ secrets.GITHUB_TOKEN }} --override --debug --data-source=milestones --milestone-match="Release ${{ github.event.inputs.release-version }}"
 
 
