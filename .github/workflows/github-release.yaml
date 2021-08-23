@@ -23,5 +23,10 @@ jobs:
                 ls -lrt
                 ./.github/scripts/create-github-release.sh ${{ github.event.inputs.release-version}} ${{ github.event.inputs.branch}} $GITHUB_REPOSITORY ${{ secrets.ACCESS_TOKEN }}
             
-            - name: Generate Release Notes
+            - name: Install Gren
               run: npm install github-release-notes -g && gren release --token=${{ secrets.GITHUB_TOKEN }} --override  
+              
+            - name: Generate Release Notes
+              run: gren release --token=${{ secrets.GITHUB_TOKEN }} --override --debug --data-source=milestones --milestone-match="Release ${{ github.event.inputs.release-version }}"
+
+
