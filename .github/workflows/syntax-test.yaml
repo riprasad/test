@@ -28,4 +28,4 @@ jobs:
       run: |
           echo "This is a pre-release. Setting 'RELEASE_TYPE' to 'pre-release'"
           echo "RELEASE_TYPE=pre-release" >> $GITHUB_ENV
-          echo "${RELEASE_TYPE}"
+    - run: echo "${RELEASE_TYPE}"
