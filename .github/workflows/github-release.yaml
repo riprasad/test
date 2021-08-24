@@ -21,7 +21,7 @@ jobs:
               uses: actions/checkout@v2
               
             - name: Determine Release Type
-              if: contains( ${{ github.event.inputs.release-version }}, "RC" )
+              if: "contains(github.event.inputs.release-version, 'RC')"
               run: |
                 echo "This is a pre-release. Setting environment variable 'PRE_RELEASE' to true"
                 echo "PRE_RELEASE=true" >> $GITHUB_ENV
