@@ -9,23 +9,27 @@ on:
         description: 'Branch to release from'
         required: true
         default: 'master'
-      pre-release:
-        description: 'Is it a pre-release?'
-        required: true
-        default: 'false'
 
 jobs:
     test:
         name: Test
-        runs-on: ubuntu-18.04    
+        runs-on: ubuntu-18.04
+        env:
+          PRE_RELEASE: false    
         steps:
             - name: Checkout Code with Ref '${{ github.ref }}'
               uses: actions/checkout@v2
+              
+            - name: Determine Release Type
+              if: contains( ${{ github.event.inputs.release-version}}, "RC" )
+              run: echo "This is a pre-release. Setting environment variable 'PRE_RELEASE' to true"
+              env:
+                PRE_RELEASE: true      
             
             - name: Create GitHub Release
               run: |
                 ls -lrt
-                ./.github/scripts/create-github-release.sh ${{ github.event.inputs.release-version}} ${{ github.event.inputs.branch}} $GITHUB_REPOSITORY ${{ secrets.ACCESS_TOKEN }} ${{ github.event.inputs.pre-release }}
+                ./.github/scripts/create-github-release.sh ${{ github.event.inputs.release-version}} ${{ github.event.inputs.branch}} $GITHUB_REPOSITORY ${{ secrets.ACCESS_TOKEN }} ${{ env.PRE_RELEASE }}
             
             #- name: Install Gren
             #  run: npm install github-release-notes -g && gren release --token=${{ secrets.GITHUB_TOKEN }} --override  
