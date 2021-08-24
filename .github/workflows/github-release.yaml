@@ -28,8 +28,8 @@ jobs:
             
             - name: Create GitHub Release
               run: |
-                ls -lrt
-                ./.github/scripts/create-github-release.sh ${{ github.event.inputs.release-version}} ${{ github.event.inputs.branch}} $GITHUB_REPOSITORY ${{ secrets.ACCESS_TOKEN }} ${{ env.PRE_RELEASE }}
+                echo "PRE_RELEASE=$PRE_RELEASE"
+                #./.github/scripts/create-github-release.sh ${{ github.event.inputs.release-version}} ${{ github.event.inputs.branch}} $GITHUB_REPOSITORY ${{ secrets.ACCESS_TOKEN }} ${{ env.PRE_RELEASE }}
             
             #- name: Install Gren
             #  run: npm install github-release-notes -g && gren release --token=${{ secrets.GITHUB_TOKEN }} --override  
