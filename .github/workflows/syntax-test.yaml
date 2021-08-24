@@ -7,10 +7,12 @@ on:
 jobs:
   build-linux-cli:
     runs-on: ubuntu-latest
+    env:
+      RELEASE_TYPE: release
     steps:
     - name: Fetch required Details
       run: |
-          touch latestRelease.json && curl https://api.github.com/repos/${GITHUB_REPOSITORY}/releases/latest > latestRelease.json
+          touch latestRelease.json && curl https://api.github.com/repos/${GITHUB_REPOSITORY}/releases | jq '.[0]' > latestRelease.json
           echo "RELEASE_VERSION=$(cat latestRelease.json | jq -r '.name')" >> $GITHUB_ENV
           echo "SOURCE_CODE_URL=$(cat latestRelease.json | jq -r '.zipball_url')" >> $GITHUB_ENV
           echo "UPLOAD_URL=$(cat latestRelease.json | jq -r '.upload_url')" >> $GITHUB_ENV
@@ -20,3 +22,10 @@ jobs:
         echo "$RELEASE_VERSION"
         echo "$SOURCE_CODE_URL"
         echo "$UPLOAD_URL"
+        
+    - name: Determine Release Type
+      if: "contains(env.RELEASE_VERSION, 'RC')"
+      run: |
+          echo "This is a pre-release. Setting 'RELEASE_TYPE' to 'pre-release'"
+          echo "RELEASE_TYPE=pre-release" >> $GITHUB_ENV
+          echo "${RELEASE_TYPE}"
