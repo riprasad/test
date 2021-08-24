@@ -1,7 +1,7 @@
 name: Post-Release 
 on:
   release:
-    types: [released]
+    types: [released, prereleased]
 env:
   RELEASE_VERSION: ${{ github.event.release.name }}
   SOURCE_CODE_URL: ${{ github.event.release.zipball_url }}
